@@ -17,7 +17,7 @@ export const verifyToken = (req, res, next) => {
 
     // Adding this userId field to the request which is going to be the userId field in the token
     req.userId = decoded.userId;
-    
+    next();
   } catch (error) {
     console.log("Error in verifyToken: ", error);
     return res.status(500).json({ success: false, message: "Server error." });
