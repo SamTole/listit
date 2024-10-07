@@ -3,6 +3,7 @@ import FloatingShape from './components/FloatingShape';
 import SignUpPage from './pages/SignUpPage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
+import LoadingSpinner from './components/LoadingSpinner';
 import { useAuthStore } from './store/authStore';
 import { useEffect } from 'react';
 
@@ -35,6 +36,10 @@ function App() {
   useEffect(() => {
     checkAuth();
   }, [checkAuth])
+
+  if (isCheckingAuth) {
+    return <LoadingSpinner />;
+  }
 
   console.log('isauthenticated ', isAuthenticated)
   console.log('user ', user)
