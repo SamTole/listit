@@ -11,7 +11,7 @@ dotenv.config();
 // Connect to database
 mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log('Database connected'))
-.catch(() => console.log('Database not connected', err))
+.catch((err) => console.log('Database not connected', err))
 
 const app = express();
 const PORT = process.env.PORT || 5000
