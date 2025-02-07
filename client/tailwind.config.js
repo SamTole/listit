@@ -16,7 +16,11 @@ export default {
     colors: {
       'white': '#FFF',
       'light-purple-1': '#6C63FF',
+      'light-purple-2': '#E1DFFF',
       'dark-purple-1': '#3F3D56',
+      'dark-purple-2': '#534CC7',
+      'gray-1': '#888888',
+      'gray-2': '#A0A0A0',
     },
   },
   plugins: [],
