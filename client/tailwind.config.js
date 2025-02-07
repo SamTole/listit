@@ -9,6 +9,8 @@ export default {
       spacing: {
         '2px': '2px',
         '3px': '3px',
+        '30rem': '30rem',
+        '42rem': '42rem',
       },
     },
     colors: {

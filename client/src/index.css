@@ -22,3 +22,9 @@
 .linear-gradient-purple {
     background-image: linear-gradient(#6C63FF, #3F3D56);
 }
+
+.linear-gradient-purple-font {
+    background-image: linear-gradient(#6C63FF, #3F3D56);
+    color: transparent;
+    background-clip: text;
+}
