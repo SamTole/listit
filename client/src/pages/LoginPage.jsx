@@ -34,16 +34,16 @@ const LoginPage = () => {
         <div className='w-3/5'>
           <div className='text-5xl font-semibold mb-3'>Welcome Back!</div>
           <div className='text-lg text-gray-1 font-semibold mb-8'>Please enter your credentials to log in.</div>
-          <form className='flex flex-col w-full mb-8'>
-            <InputField type='email' placeholder='Email' classes='mb-6' />
-            <InputField type='password' placeholder='Password' classes='mb-6' />
+          <form onSubmit={handleLogin} className='flex flex-col w-full mb-8'>
+            <InputField onChange={(e) => setEmail(e.target.value)} value={email} type='email' placeholder='Email' classes='mb-6' />
+            <InputField onChange={(e) => setPassword(e.target.value)} value={password} type='password' placeholder='Password' classes='mb-6' />
             <FormBtn text='Log In' />
           </form>
           <div className='text-gray-1'>Don't have an account? <Link to={'/signup'} className='text-light-purple-1 transition hover:text-dark-purple-2 font-bold'>Sign up here</Link></div>
         </div>
       </div>
       <div className='bg-light-purple-2 flex items-center justify-center'>
-        <img src={LoginImage} alt="login-image.png" className='w-2/3' />
+        <img src={LoginImage} alt="login-image.png" className='w-1/2' />
       </div>
     </div>
 
