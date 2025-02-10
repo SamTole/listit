@@ -1,19 +1,31 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useAuthStore } from '../store/authStore'
 
+import SideMenu from '../components/SideMenu';
+
 const DashboardPage = () => {
+  const [formOpen, setFormOpen] = useState(false)
+
   const { user, logout } = useAuthStore();
 
   const handleLogout = () => {
     logout();
   }
 
-  return (
-    <div className='flex flex-col'>
-      <p>Dashboard Page</p>
-      <p>Hi {user.name}</p>
+  const addTask = () => {
+    setFormOpen(true)
 
-      <button className='bg-red-400' onClick={handleLogout}>Logout</button>
+    console.log('open')
+  }
+
+  return (
+    <div className='bg-light-purple-2 h-screen flex'>
+      <SideMenu />
+
+      <div>
+        <button onClick={(e) => addTask()} className='bg-light-purple-1'>Add Task</button>
+      </div>
+      {/* <button className='bg-red-400' onClick={handleLogout}>Logout</button> */}
     </div>
   )
 }
