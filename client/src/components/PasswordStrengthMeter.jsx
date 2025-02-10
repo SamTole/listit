@@ -11,14 +11,14 @@ const PasswordCriteria = ({password}) => {
   ];
 
   return (
-    <div className='mt-2 space-y-1'>
+    <div className='mt-3 space-y-1'>
       {
         criteria.map((item, index) => (
           <div key={item.label} className='flex items-center text-xs'>
             {item.met ? (
-              <Check className='size-4 text-green-500 mr-2' />
+              <Check className='size-4 text-green-1 mr-2' />
             ) : (
-              <X className='size-4 text-gray-500 mr-2' />
+              <X className='size-4 text-gray-1 mr-2' />
             )}
             <span className={item.met ? 'text-green-500' : 'text-gray-400'}>{item.label}</span>
           </div>
@@ -51,18 +51,18 @@ const PasswordStrengthMeter = ({password}) => {
 
   const getColor = (strength) => {
     if (strength === 0) {
-      return 'bg-red-500';
+      return 'bg-gray-3';
     }
     if (strength === 1) {
-      return 'bg-red-400';
+      return 'bg-red-1';
     }
     if (strength === 2) {
-      return 'bg-yellow-500';
+      return 'bg-orange-1';
     }
     if (strength === 3) {
-      return 'bg-yellow-400';
+      return 'bg-yellow-1';
     }
-    return 'bg-green-500';
+    return 'bg-green-1';
   }
 
   const getStrengthText = (strength) => {
@@ -82,17 +82,17 @@ const PasswordStrengthMeter = ({password}) => {
   }
 
   return (
-    <div className='mt-2'>
-      <div className='flex justify-between items-center mb-1'>
-        <span className='text-xs text-gray-400'>Password strength</span>
-        <span className='text-xs text-gray-400'>{getStrengthText(strength)}</span>
+    <div className='px-2 mb-6'>
+      <div className='flex justify-between items-center mb-2'>
+        <span className='text-gray-1'>Password strength</span>
+        <span className='text-gray-1'>{getStrengthText(strength)}</span>
       </div>
       
-      <div className='flex space-x-1'>
+      <div className='flex bg-gray-3 rounded-full overflow-clip'>
         {[...Array(4)].map((_, index) => (
           <div 
             key={index}
-            className={`h-1 w-1/4 rounded-full transition-colors duraction-300 ${index < strength ? getColor(strength) : 'bg-gray-600'}`} />
+            className={`py-1 w-1/4 transition-colors duraction-300 ${index < strength ? getColor(strength) : ''}`} />
         ))}
       </div>
       <PasswordCriteria password={password} />
