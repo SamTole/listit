@@ -82,6 +82,16 @@ export const login = async (req, res) => {
   }
 }
 
+export const addCategory = async (req, res) => {
+  const test = await User.find()
+  console.log('hello', test)
+  // const { categoryName, categoryColor } = req.body
+
+  await User.findByIdAndUpdate('67aa37bcbf0b9d9095f97676', { name: 'bob'})
+
+  // await User.updateOne({ _id: ObjectId('67aa37bcbf0b9d9095f97676')}, {$set: { 'name': 'bob' }})
+}
+
 export const logout = async (req, res) => {
   // Clear the cookie to logout
   res.clearCookie("token");

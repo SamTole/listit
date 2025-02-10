@@ -61,6 +61,14 @@ export const useAuthStore = create((set) => ({
     } 
   },
 
+  addCategory: async () => {
+    try {
+      const response = await axios.post(`${API_URL}/addCategory`);      
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
   logout: async () => {
     set({ isLoading: true, error: null });
 
