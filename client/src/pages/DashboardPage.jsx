@@ -9,7 +9,7 @@ const DashboardPage = () => {
   const [categoryName, setCategoryName] = useState('')
   const [categoryColor, setCategoryColor] = useState('')
 
-  const { user, logout, addCategory } = useAuthStore();
+  const { user, logout, addCategory, categories } = useAuthStore();
 
   const handleLogout = () => {
     logout();
@@ -23,13 +23,12 @@ const DashboardPage = () => {
   
   const handleCategorySubmit = async (e) => {
     e.preventDefault()
-    await addCategory()
+    await addCategory(categoryName, categoryColor)
   }
 
   return (
     <div className='bg-light-purple-2 h-screen flex'>
       <SideMenu />
-
       <div>
         <button onClick={(e) => addTask()} className='bg-light-purple-1'>Add Task</button>
         {

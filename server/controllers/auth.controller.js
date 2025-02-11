@@ -83,13 +83,21 @@ export const login = async (req, res) => {
 }
 
 export const addCategory = async (req, res) => {
-  const test = await User.find()
-  console.log('hello', test)
-  // const { categoryName, categoryColor } = req.body
+  const { categoryName, categoryColor } = req.body
 
-  await User.findByIdAndUpdate('67aa37bcbf0b9d9095f97676', { name: 'bob'})
+  try {
+    await User.findByIdAndUpdate(req.userId, {$push: {categories: {name: categoryName, color: categoryColor}}})    
+    const user = await User.findById(req.userId).select("categories");
 
-  // await User.updateOne({ _id: ObjectId('67aa37bcbf0b9d9095f97676')}, {$set: { 'name': 'bob' }})
+    res.status(200).json({
+      success: true,
+      message: "Category added successfully.",
+      categories: user.categories,
+    })
+  } catch (error) {
+    console.log("Error adding category.");
+    res.status(400).json({success: false, message: error.message})
+  }
 }
 
 export const logout = async (req, res) => {

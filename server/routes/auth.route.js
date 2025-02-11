@@ -10,7 +10,7 @@ router.get("/check-auth", verifyToken, checkAuth);
 
 router.post("/signup", signup);
 router.post("/login", login);
-router.post("/addCategory", addCategory);
+router.post("/addCategory", verifyToken, addCategory);
 router.post("/logout", logout);
 
 export default router;
