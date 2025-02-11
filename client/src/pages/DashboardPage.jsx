@@ -8,17 +8,15 @@ const DashboardPage = () => {
   const [categoryFormOpen, setCategoryFormOpen] = useState(false)
   const [categoryName, setCategoryName] = useState('')
   const [categoryColor, setCategoryColor] = useState('')
+  const [taskName, setTaskName] = useState('')
+  const [taskDescription, setTaskDescription] = useState('')
+  const [taskCategory, setTaskCategory] = useState('')
+  const [taskDeadline, setTaskDeadline] = useState('')
 
-  const { user, logout, addCategory, categories } = useAuthStore();
+  const { user, logout, addCategory, addTask } = useAuthStore();
 
   const handleLogout = () => {
     logout();
-  }
-
-  const addTask = () => {
-    setTaskFormOpen(true)
-
-    console.log('open')
   }
   
   const handleCategorySubmit = async (e) => {
@@ -26,23 +24,36 @@ const DashboardPage = () => {
     await addCategory(categoryName, categoryColor)
   }
 
+  const handleTaskSubmit = async (e) => {
+    e.preventDefault()
+    await addTask(taskName, taskDescription, taskCategory, taskDeadline)
+  }
+
   return (
     <div className='bg-light-purple-2 h-screen flex'>
       <SideMenu />
       <div>
-        <button onClick={(e) => addTask()} className='bg-light-purple-1'>Add Task</button>
+        <button onClick={() => setTaskFormOpen(true)} className='bg-light-purple-1'>Add Task</button>
         {
           taskFormOpen ? 
-            <form className='bg-white p-2 flex flex-col'>
-              <input type="text" placeholder='Title' className='border' />
-              <textarea placeholder='Description' className='border'></textarea>
+            <form onSubmit={handleTaskSubmit} className='bg-white p-2 flex flex-col'>
+              <input onChange={(e) => setTaskName(e.target.value)} value={taskName} type="text" placeholder='Title' className='border' />
+              <textarea onChange={(e) => setTaskDescription(e.target.value)} value={taskDescription} placeholder='Description' className='border'></textarea>
+              <select onChange={(e) => setTaskCategory(e.target.value)} value={taskCategory} className='border'>
+                {
+                  user.categories.map((category, index) => 
+                    <option key={index}>{category.name}</option>
+                  )
+                }
+              </select>
+              <input onChange={(e) => setTaskDeadline(e.target.value)} value={taskDeadline} type="date" className='border' />
               <button type="submit">Submit</button>
             </form>
           :
             <></>
         }
 
-        <button onClick={(e) => setCategoryFormOpen(true)} className='bg-light-purple-1'>Add Category</button>
+        <button onClick={() => setCategoryFormOpen(true)} className='bg-light-purple-1'>Add Category</button>
         {
           categoryFormOpen ? 
             <form onSubmit={handleCategorySubmit} className='bg-white p-2 flex flex-col'>

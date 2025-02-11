@@ -12,7 +12,6 @@ export const useAuthStore = create((set) => ({
   error: null,
   isLoading: false,
   isCheckingAuth: true,
-  categories: [],
 
   signup: async (email, password, name) => {
     set({
@@ -66,11 +65,29 @@ export const useAuthStore = create((set) => ({
     try {
       const response = await axios.post(`${API_URL}/addCategory`, {
         categoryName, categoryColor
-      });      
-      
+      });   
+
       set({
-        categories: response.data.categories
-      })
+        user: response.data.user,
+        isAuthenticated: true,
+        isLoading: false,
+      }) 
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
+  addTask: async (taskName, taskDescription, taskCategory, taskDeadline) => {
+    try {
+      const response = await axios.post(`${API_URL}/addTask`, {
+        taskName, taskDescription, taskCategory, taskDeadline
+      });   
+
+      set({
+        user: response.data.user,
+        isAuthenticated: true,
+        isLoading: false,
+      }) 
     } catch (error) {
       console.log(error)
     }
