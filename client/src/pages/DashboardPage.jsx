@@ -4,7 +4,7 @@ import { useAuthStore } from '../store/authStore'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleLeft, faAngleRight, faPlus, faXmark } from '@fortawesome/free-solid-svg-icons'
 import SideMenu from '../components/SideMenu';
-import InputField from '../components/InputField';
+import FormBtn from '../components/FormBtn';
 
 const DashboardPage = () => {
   const [taskFormOpen, setTaskFormOpen] = useState(false)
@@ -66,19 +66,40 @@ const DashboardPage = () => {
               Category</button>
               {
                 taskFormOpen ? 
-                  <form onSubmit={handleTaskSubmit} className='bg-white p-2 flex flex-col'>
-                    <input onChange={(e) => setTaskName(e.target.value)} value={taskName} type="text" placeholder='Title' className='border' />
-                    <textarea onChange={(e) => setTaskDescription(e.target.value)} value={taskDescription} placeholder='Description' className='border'></textarea>
-                    <select onChange={(e) => setTaskCategory(e.target.value)} value={taskCategory} className='border'>
-                      {
-                        user.categories.map((category, index) => 
-                          <option key={index}>{category.name}</option>
-                        )
-                      }
-                    </select>
-                    <input onChange={(e) => setTaskDeadline(e.target.value)} value={taskDeadline} type="date" className='border' />
-                    <button type="submit">Submit</button>
-                  </form>
+                  <div className='fixed top-0 left-0 h-screen w-screen flex justify-center items-center z-10'>
+                    <div className='bg-white rounded-b-md rounded-t-sm overflow-clip w-1/3 shadow-xl shadow-light-purple-2'>
+                      <div className='border-t-4 border-light-purple-1 bg-light-purple-2 py-4 px-4 text-light-purple-1 flex items-center justify-between'>
+                        <div>Add new task</div>
+                        <button onClick={() => setTaskFormOpen(false)}><FontAwesomeIcon className='text-gray-4 transition hover:text-light-purple-1' icon={faXmark} size='lg' /></button>
+                      </div>
+                      <form onSubmit={handleTaskSubmit} className='py-6 px-5 flex flex-col text-gray-5'>
+                        <label className='mb-2'>Title</label>
+                        <input onChange={(e) => setTaskName(e.target.value)} value={taskName} type="text" className='border-1 border-gray-3 rounded-md py-2 px-3 mb-4' />
+                        <label className='mb-2'>Description</label>
+                        {/* Ensure this could be scrolled on screens with less height */}
+                        <textarea onChange={(e) => setTaskDescription(e.target.value)} value={taskDescription} className='border-1 border-gray-3 rounded-md py-2 px-3 mb-4'></textarea>
+                        <div className='flex items-center mb-8'>
+                          <div className='flex flex-col w-1/2 mr-2'>
+                            <label className='mb-2'>Category</label>
+                            <select onChange={(e) => setTaskCategory(e.target.value)} value={taskCategory} className='border-1 border-gray-3 rounded-md p-3'>
+                              {
+                                user.categories.map((category, index) => 
+                                  <option key={index}>{category.name}</option>
+                                )
+                              }
+                            </select>
+                          </div>
+                          <div className='flex flex-col w-1/2 ml-2'>
+                            <label className='mb-2'>Deadline</label>
+                            <input onChange={(e) => setTaskDeadline(e.target.value)} value={taskDeadline} type="date" className='border-1 border-gray-3 rounded-md py-2 px-3' />
+                          </div>
+                        </div>
+                        <div className='flex justify-end font-medium'>
+                          <button className='bg-light-purple-1 text-white rounded-full px-5 py-2 w-1/3 shadow-md transition hover:bg-dark-purple-2' type='submit'>Save</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
                 :
                   <></>
               }
@@ -89,13 +110,14 @@ const DashboardPage = () => {
                     <div className='bg-white rounded-b-md rounded-t-sm overflow-clip w-1/3 shadow-xl shadow-light-purple-2'>
                       <div className='border-t-4 border-light-purple-1 bg-light-purple-2 py-4 px-4 text-light-purple-1 flex items-center justify-between'>
                         <div>Add new category</div>
-                        <FontAwesomeIcon className='text-gray-4' icon={faXmark} size='lg' />
+                        <button onClick={() => setCategoryFormOpen(false)}><FontAwesomeIcon className='text-gray-4 transition hover:text-light-purple-1' icon={faXmark} size='lg' /></button>
                       </div>
-                      <form onSubmit={handleCategorySubmit} className='py-4 px-4 flex flex-col'>
-                        <label className='mb-2'>Category Name</label>
+                      <form onSubmit={handleCategorySubmit} className='py-6 px-5 flex flex-col text-gray-5'>
+                        <label className='mb-2'>Name</label>
                         <input onChange={(e) => setCategoryName(e.target.value)} value={categoryName} type="text" className='border-1 border-gray-3 rounded-md py-2 px-3 mb-4' />
-                        <select onChange={(e) => setCategoryColor(e.target.value)} defaultValue={'default'} className='border'>
-                          <option value="default" disabled>Select color</option>
+                        <label className='mb-2'>Color</label>
+                        <select onChange={(e) => setCategoryColor(e.target.value)} defaultValue={'default'} className='border-1 border-gray-3 rounded-md py-2 px-3 mb-8'>
+                          <option value="default" disabled></option>
                           <option value="red">Red</option>
                           <option value="orange">Orange</option>
                           <option value="yellow">Yellow</option>
@@ -103,7 +125,9 @@ const DashboardPage = () => {
                           <option value="blue">Blue</option>
                           <option value="purple">Purple</option>
                         </select>
-                        <button type='submit'>Submit</button>
+                        <div className='flex justify-end font-medium'>
+                          <button className='bg-light-purple-1 text-white rounded-full px-5 py-2 w-1/3 shadow-md transition hover:bg-dark-purple-2' type='submit'>Save</button>
+                        </div>
                       </form>
                     </div>
                   </div>
