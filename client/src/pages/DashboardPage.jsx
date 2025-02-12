@@ -47,12 +47,12 @@ const DashboardPage = () => {
     <div className={`bg-light-purple-2 h-screen flex`}>
       {taskFormOpen || categoryFormOpen ? <div className='fixed h-screen w-screen bg-white opacity-60'></div> : <></>}
       <SideMenu />
-      <div className='py-10 px-14 w-full'>
-        <div className='flex items-center justify-between'>
+      <div className='py-10 px-14 w-full flex flex-col'>
+        <div className='flex items-center justify-between mb-8'>
           {/* <div className='flex'> */}
             <div className='flex items-center'>
               <div className='text-xl text-gray-4'>{dayBefore.toLocaleDateString(undefined, options)}</div>
-              <div className='text-3xl mx-8 font-medium flex flex-col'>{currentDate.toLocaleDateString(undefined, options)}
+              <div className='text-3xl mx-8 font-medium flex flex-col text-gray-5'>{currentDate.toLocaleDateString(undefined, options)}
                 <div className='flex justify-center'>
                   <div className='border-b-3 border-light-purple-1 pb-2 w-1/3'></div>
                 </div>
@@ -60,9 +60,9 @@ const DashboardPage = () => {
               <div className='text-xl text-gray-4'>{dayAfter.toLocaleDateString(undefined, options)}</div>
             </div>
             <div className='flex items-center'>
-              <button onClick={() => setTaskFormOpen(true)} className='font-medium border-2 border-gray-4 text-light-purple-1 py-3 px-5 rounded-md flex items-center transition hover:bg-light-purple-5'><FontAwesomeIcon className='mr-3' icon={faPlus} size='sm' />
+              <button onClick={() => setTaskFormOpen(true)} className='font-medium bg-light-purple-1 text-white py-3 px-5 rounded-md shadow-md flex items-center transition hover:bg-dark-purple-2'><FontAwesomeIcon className='mr-3' icon={faPlus} size='sm' />
               Task</button>
-              <button onClick={() => setCategoryFormOpen(true)} className='font-medium border-2 border-gray-4 text-light-purple-1 py-3 px-5 rounded-md flex items-center transition hover:bg-light-purple-5 ml-3'><FontAwesomeIcon className='mr-4' icon={faPlus} size='sm' />
+              <button onClick={() => setCategoryFormOpen(true)} className='font-medium bg-light-purple-1 text-white py-3 px-5 rounded-md shadow-md flex items-center transition hover:bg-dark-purple-2 ml-3'><FontAwesomeIcon className='mr-4' icon={faPlus} size='sm' />
               Category</button>
               {
                 taskFormOpen ? 
@@ -103,7 +103,6 @@ const DashboardPage = () => {
                 :
                   <></>
               }
-
               {
                 categoryFormOpen ? 
                   <div className='fixed top-0 left-0 h-screen w-screen flex justify-center items-center z-10'>
@@ -136,7 +135,12 @@ const DashboardPage = () => {
               }
             </div>
           {/* </div> */}
+        </div>
+        <div className='relative w-full grow overflow-x-auto'>
+          <div className='flex absolute top-0 left-0'>
+            <div className='bg-white h-full w-35rem mr-4'>hi</div>
 
+          </div>
         </div>
 
       </div>

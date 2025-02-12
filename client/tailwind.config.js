@@ -10,6 +10,7 @@ export default {
         '2px': '2px',
         '3px': '3px',
         '30rem': '30rem',
+        '35rem': '35rem',
         '42rem': '42rem',
       },
     },
