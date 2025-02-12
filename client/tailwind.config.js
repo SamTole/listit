@@ -13,6 +13,12 @@ export default {
         '42rem': '42rem',
       },
     },
+    borderWidth: {
+      '1': '1px',
+      '2': '2px',
+      '3': '3px',
+      '4': '4px',
+    },
     colors: {
       'white': '#FFF',
       'light-purple-1': '#6C63FF',
@@ -20,6 +26,7 @@ export default {
       'light-purple-3': '#827CF1',
       'light-purple-4': '#D2CFFF',
       'light-purple-5': '#BDB9FF',
+      'light-purple-6': '#F6F5FF',
       'dark-purple-1': '#3F3D56',
       'dark-purple-2': '#534CC7',
       'gray-1': '#888888',

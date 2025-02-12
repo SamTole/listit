@@ -16,11 +16,11 @@ const SideMenu = () => {
   }
 
   return (
-    <div className='bg-white flex flex-col justify-between items-center p-8 shadow-lg'>
+    <div className='bg-white flex flex-col justify-between items-center px-8 py-10 shadow-lg'>
         <img src={stickyNote} alt="sticky-note.png" className='w-10' />
         <div className='flex flex-col items-center'>
             <Link to={'/'}><FontAwesomeIcon icon={faRectangleList} size='xl' className={`${location.pathname == '/' ? 'text-light-purple-1' : 'text-gray-4'} transition hover:text-light-purple-1`} /></Link>
-            <Link to={'/calendar'} className='my-20'><FontAwesomeIcon icon={faCalendar} size='xl' className={`${location.pathname == '/calendar' ? 'text-light-purple-1' : 'text-gray-4'} transition hover:text-light-purple-1`} /></Link>
+            <Link to={'/calendar'} className='my-14'><FontAwesomeIcon icon={faCalendar} size='xl' className={`${location.pathname == '/calendar' ? 'text-light-purple-1' : 'text-gray-4'} transition hover:text-light-purple-1`} /></Link>
             <Link to={'/profile'}><FontAwesomeIcon icon={faUserCircle} size='xl' className={`${location.pathname == '/profile' ? 'text-light-purple-1' : 'text-gray-4'} transition hover:text-light-purple-1`} /></Link>
         </div>
         <Link onClick={handleLogout}><FontAwesomeIcon icon={faArrowRightFromBracket} size='xl' className='text-gray-4 transition hover:text-light-purple-1' /></Link>
