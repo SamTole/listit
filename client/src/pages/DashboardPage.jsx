@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAuthStore } from '../store/authStore'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -15,6 +15,7 @@ const DashboardPage = () => {
   const [taskDescription, setTaskDescription] = useState('')
   const [taskCategory, setTaskCategory] = useState('')
   const [taskDeadline, setTaskDeadline] = useState('')
+  const [tasks, setTasks] = useState([])
 
   const { user, logout, addCategory, addTask } = useAuthStore();
   const currentDate = new Date()
@@ -28,6 +29,19 @@ const DashboardPage = () => {
     month: 'short',
     day: 'numeric',
   }
+  
+  useEffect(() => {
+    let filteredTasks = []
+
+    const uniqueCategories = [...new Set(user.tasks.map(task => task.category))]
+
+    uniqueCategories.forEach((category) => {
+      let arr = user.tasks.filter((task) => task.category == category)
+      filteredTasks.push(arr)
+    })
+    
+    setTasks(filteredTasks)
+  }, [])
 
   // const handleLogout = () => {
   //   logout();
@@ -43,11 +57,32 @@ const DashboardPage = () => {
     await addTask(taskName, taskDescription, taskCategory, taskDeadline)
   }
 
+
+  // const getTasks = () => {
+  //   let filteredTasks = []
+
+  //   const uniqueCategories = [...new Set(user.tasks.map(task => task.category))]
+
+  //   uniqueCategories.forEach((category) => {
+  //     let arr = user.tasks.filter((task) => task.category == category)
+  //     filteredTasks.push(arr)
+  //   })
+    
+  //   console.log('un ', filteredTasks)
+
+  //   filteredTasks.forEach((tasks) => {
+  //     tasks.map((task) => {
+  //       console.log(task)
+  //       return <div>test</div>
+  //     })
+  //   })
+  // }
+
   return (
     <div className={`bg-light-purple-2 h-screen flex`}>
       {taskFormOpen || categoryFormOpen ? <div className='fixed h-screen w-screen bg-white opacity-60'></div> : <></>}
       <SideMenu />
-      <div className='py-10 px-14 w-full flex flex-col'>
+      <div className='pt-10 pb-5 px-14 w-full flex flex-col'>
         <div className='flex items-center justify-between mb-8'>
           {/* <div className='flex'> */}
             <div className='flex items-center'>
@@ -137,8 +172,21 @@ const DashboardPage = () => {
           {/* </div> */}
         </div>
         <div className='relative w-full grow overflow-x-auto'>
-          <div className='flex absolute top-0 left-0'>
-            <div className='bg-white h-full w-35rem mr-4'>hi</div>
+          <div className='tasks-container w-full h-full absolute top-0 left-0'>
+            {
+              tasks.map((taskCategory, index) => {
+                return <div key={index} className='bg-gray-6 h-fit rounded-md shadow-sm py-6 px-5'>{taskCategory.map((task, index) => {
+                  return <div key={index}>
+                    <div className={`${index !== 0 ? 'hidden' : 'mb-2 font-medium uppercase'}`}>{task.category}</div>
+                    <div className={`${index !== 0 ? '' : 'mb-6'} bg-white drop-shadow-md`}>
+                      {task.name}
+                    </div>
+                  </div>
+                })}</div>
+              })
+            }
+
+
 
           </div>
         </div>
