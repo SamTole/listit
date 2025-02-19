@@ -52,7 +52,7 @@ const DashboardPage = () => {
     
     console.log(filteredTasks)
     setTasks(filteredTasks)
-  }, [])
+  }, [user])
 
   // const handleLogout = () => {
   //   logout();
@@ -173,7 +173,7 @@ const DashboardPage = () => {
                   return <div key={index}>
                     <div className={`${index !== 0 ? 'hidden' : 'mb-2 font-medium uppercase'} flex items-center`}><div className={`${colorVariants[categoryColor.color].bg} mr-2 p-1 rounded-full`}></div> {task.category}</div>
                     <div className={`${index !== 0 ? '' : 'mb-6'} bg-white drop-shadow-md px-4 py-5 rounded-sm`}>
-                      <div className={`border-l-3 ${colorVariants[categoryColor.color].border} pl-2`}>
+                      <div className={`border-l-4 ${colorVariants[categoryColor.color].border} pl-4`}>
                         <div className='font-medium'>{task.name}</div>
                       </div>
                     </div>
