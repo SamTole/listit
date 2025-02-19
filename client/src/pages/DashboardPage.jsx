@@ -16,8 +16,18 @@ const DashboardPage = () => {
   const [taskCategory, setTaskCategory] = useState('')
   const [taskDeadline, setTaskDeadline] = useState('')
   const [tasks, setTasks] = useState([])
-
   const { user, logout, addCategory, addTask } = useAuthStore();
+
+  const colorVariants = {
+    red: {bg: 'bg-red-category', border: 'border-red-category'},
+    orange: {bg: 'bg-orange-category', border: 'border-orange-category'},
+    yellow: {bg: 'bg-yellow-category', border: 'border-yellow-category'},
+    green: {bg: 'bg-green-category', border: 'border-green-category'},
+    blue: {bg: 'bg-blue-category', border: 'border-blue-category'},
+    purple: {bg: 'bg-purple-category', border: 'border-purple-category'},
+    pink: {bg: 'bg-pink-category', border: 'border-pink-category'},
+  }
+
   const currentDate = new Date()
   let dayBefore = new Date()
   dayBefore = dayBefore.setDate(dayBefore.getDate() - 1)
@@ -40,6 +50,7 @@ const DashboardPage = () => {
       filteredTasks.push(arr)
     })
     
+    console.log(filteredTasks)
     setTasks(filteredTasks)
   }, [])
 
@@ -56,27 +67,6 @@ const DashboardPage = () => {
     e.preventDefault()
     await addTask(taskName, taskDescription, taskCategory, taskDeadline)
   }
-
-
-  // const getTasks = () => {
-  //   let filteredTasks = []
-
-  //   const uniqueCategories = [...new Set(user.tasks.map(task => task.category))]
-
-  //   uniqueCategories.forEach((category) => {
-  //     let arr = user.tasks.filter((task) => task.category == category)
-  //     filteredTasks.push(arr)
-  //   })
-    
-  //   console.log('un ', filteredTasks)
-
-  //   filteredTasks.forEach((tasks) => {
-  //     tasks.map((task) => {
-  //       console.log(task)
-  //       return <div>test</div>
-  //     })
-  //   })
-  // }
 
   return (
     <div className={`bg-light-purple-2 h-screen flex`}>
@@ -116,7 +106,8 @@ const DashboardPage = () => {
                         <div className='flex items-center mb-8'>
                           <div className='flex flex-col w-1/2 mr-2'>
                             <label className='mb-2'>Category</label>
-                            <select onChange={(e) => setTaskCategory(e.target.value)} value={taskCategory} className='border-1 border-gray-3 rounded-md p-3'>
+                            <select onChange={(e) => setTaskCategory(e.target.value)} defaultValue={'default'} className='border-1 border-gray-3 rounded-md p-3'>
+                            `<option value="default" disabled></option>
                               {
                                 user.categories.map((category, index) => 
                                   <option key={index}>{category.name}</option>
@@ -150,14 +141,15 @@ const DashboardPage = () => {
                         <label className='mb-2'>Name</label>
                         <input onChange={(e) => setCategoryName(e.target.value)} value={categoryName} type="text" className='border-1 border-gray-3 rounded-md py-2 px-3 mb-4' />
                         <label className='mb-2'>Color</label>
-                        <select onChange={(e) => setCategoryColor(e.target.value)} defaultValue={'default'} className='border-1 border-gray-3 rounded-md py-2 px-3 mb-8'>
+                        <select onChange={(e) => setCategoryColor(e.target.value)} defaultValue={'default'} className={`text-${categoryColor}-category border-1 border-gray-3 rounded-md py-2 px-3 mb-8 font-semibold`}>
                           <option value="default" disabled></option>
-                          <option value="red">Red</option>
-                          <option value="orange">Orange</option>
-                          <option value="yellow">Yellow</option>
-                          <option value="green">Green</option>
-                          <option value="blue">Blue</option>
-                          <option value="purple">Purple</option>
+                          <option value="red" className='font-semibold text-red-category'>Red</option>
+                          <option value="orange" className='font-semibold text-orange-category'>Orange</option>
+                          <option value="yellow" className='font-semibold text-yellow-category'>Yellow</option>
+                          <option value="green" className='font-semibold text-green-category'>Green</option>
+                          <option value="blue" className='font-semibold text-blue-category'>Blue</option>
+                          <option value="purple" className='font-semibold text-purple-category'>Purple</option>
+                          <option value="pink" className='font-semibold text-pink-category'>Pink</option>
                         </select>
                         <div className='flex justify-end font-medium'>
                           <button className='bg-light-purple-1 text-white rounded-full px-5 py-2 w-1/3 shadow-md transition hover:bg-dark-purple-2' type='submit'>Save</button>
@@ -176,10 +168,14 @@ const DashboardPage = () => {
             {
               tasks.map((taskCategory, index) => {
                 return <div key={index} className='bg-gray-6 h-fit rounded-md shadow-sm py-6 px-5'>{taskCategory.map((task, index) => {
+                  let categoryColor = user.categories.find((taskCat) => taskCat.name == task.category)
+
                   return <div key={index}>
-                    <div className={`${index !== 0 ? 'hidden' : 'mb-2 font-medium uppercase'}`}>{task.category}</div>
-                    <div className={`${index !== 0 ? '' : 'mb-6'} bg-white drop-shadow-md`}>
-                      {task.name}
+                    <div className={`${index !== 0 ? 'hidden' : 'mb-2 font-medium uppercase'} flex items-center`}><div className={`${colorVariants[categoryColor.color].bg} mr-2 p-1 rounded-full`}></div> {task.category}</div>
+                    <div className={`${index !== 0 ? '' : 'mb-6'} bg-white drop-shadow-md px-4 py-5 rounded-sm`}>
+                      <div className={`border-l-3 ${colorVariants[categoryColor.color].border} pl-2`}>
+                        <div className='font-medium'>{task.name}</div>
+                      </div>
                     </div>
                   </div>
                 })}</div>
