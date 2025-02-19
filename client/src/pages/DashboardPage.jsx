@@ -48,11 +48,12 @@ const DashboardPage = () => {
 
     uniqueCategories.forEach((category) => {
       let arr = user.tasks.filter((task) => task.category == category)
+      arr = arr.filter((task) => new Date(task.deadline).toLocaleDateString() == currentDate.toLocaleDateString())
       filteredTasks.push(arr)
     })
     
     setTasks(filteredTasks)
-  }, [user])
+  }, [user, currentDate])
 
   // const handleLogout = () => {
   //   logout();
@@ -195,7 +196,7 @@ const DashboardPage = () => {
           <div className='tasks-container w-full h-full absolute top-0 left-0'>
             {
               tasks.map((taskCategory, index) => {
-                return <div key={index} className='bg-gray-6 h-fit rounded-md shadow-sm py-6 px-5'>{taskCategory.map((task, index) => {
+                return <div key={index} className={`${!taskCategory.length ? 'hidden' : ''} bg-gray-6 h-fit rounded-md shadow-sm py-6 px-5`}>{taskCategory.map((task, index) => {
                   let categoryColor = user.categories.find((taskCat) => taskCat.name == task.category)
 
                   return <div key={index}>
