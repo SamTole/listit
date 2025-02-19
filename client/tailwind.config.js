@@ -36,6 +36,7 @@ export default {
       'gray-4': '#9B9B9B',
       'gray-5': '#474747',
       'gray-6': '#F9F9F9',
+      'gray-7': '#878787',
       'red-1': '#FF6363',
       'red-category': '#EC585A',
       'orange-category': '#F9B555',

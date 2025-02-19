@@ -16,31 +16,32 @@ const DashboardPage = () => {
   const [taskCategory, setTaskCategory] = useState('')
   const [taskDeadline, setTaskDeadline] = useState('')
   const [tasks, setTasks] = useState([])
+  const [currentDate, setCurrentDate] = useState(new Date())
+  const [dayBefore, setDayBefore] = useState(new Date())
+  const [dayAfter, setDayAfter] = useState(new Date())
   const { user, logout, addCategory, addTask } = useAuthStore();
 
   const colorVariants = {
-    red: {bg: 'bg-red-category', border: 'border-red-category'},
-    orange: {bg: 'bg-orange-category', border: 'border-orange-category'},
-    yellow: {bg: 'bg-yellow-category', border: 'border-yellow-category'},
-    green: {bg: 'bg-green-category', border: 'border-green-category'},
-    blue: {bg: 'bg-blue-category', border: 'border-blue-category'},
-    purple: {bg: 'bg-purple-category', border: 'border-purple-category'},
-    pink: {bg: 'bg-pink-category', border: 'border-pink-category'},
+    red: {bg: 'bg-red-category', border: 'border-red-category', text: 'text-red-category'},
+    orange: {bg: 'bg-orange-category', border: 'border-orange-category', text: 'text-orange-category'},
+    yellow: {bg: 'bg-yellow-category', border: 'border-yellow-category', text: 'text-yellow-category'},
+    green: {bg: 'bg-green-category', border: 'border-green-category', text: 'text-green-category'},
+    blue: {bg: 'bg-blue-category', border: 'border-blue-category', text: 'text-blue-category'},
+    purple: {bg: 'bg-purple-category', border: 'border-purple-category', text: 'text-purple-category'},
+    pink: {bg: 'bg-pink-category', border: 'border-pink-category', text: 'text-pink-category'},
   }
 
-  const currentDate = new Date()
-  let dayBefore = new Date()
-  dayBefore = dayBefore.setDate(dayBefore.getDate() - 1)
-  dayBefore = new Date(dayBefore)
-  let dayAfter = new Date()
-  dayAfter = dayAfter.setDate(dayAfter.getDate() + 1)
-  dayAfter = new Date(dayAfter)
   const options = {
     month: 'short',
     day: 'numeric',
   }
   
   useEffect(() => {
+    setDayBefore(dayBefore.setDate(currentDate.getDate() - 1))
+    setDayBefore(new Date(dayBefore))
+    setDayAfter(dayAfter.setDate(currentDate.getDate() + 1))
+    setDayAfter(new Date(dayAfter))
+
     let filteredTasks = []
 
     const uniqueCategories = [...new Set(user.tasks.map(task => task.category))]
@@ -50,7 +51,6 @@ const DashboardPage = () => {
       filteredTasks.push(arr)
     })
     
-    console.log(filteredTasks)
     setTasks(filteredTasks)
   }, [user])
 
@@ -68,21 +68,49 @@ const DashboardPage = () => {
     await addTask(taskName, taskDescription, taskCategory, taskDeadline)
   }
 
+  const getDateBefore = () => {
+    setCurrentDate(dayBefore)
+
+    let dateNow = dayBefore
+    let newDayBefore = dateNow.setDate(dateNow.getDate() - 1)
+    let newDayAfter = dateNow.setDate(dateNow.getDate() + 2)
+
+    setDayBefore(dayBefore.setDate(currentDate.getDate() - 1))
+    setDayBefore(new Date(newDayBefore))
+    setDayAfter(dayAfter.setDate(currentDate.getDate() + 2))
+    setDayBefore(new Date(newDayBefore))
+    setDayAfter(new Date(newDayAfter))
+  }
+
+  const getDateAfter = () => {
+    setCurrentDate(dayAfter)
+    
+    let dateNow = dayAfter
+    let newDayAfter = dateNow.setDate(dateNow.getDate() + 1)
+    let newDayBefore = dateNow.setDate(dateNow.getDate() - 2)
+
+    setDayBefore(dayBefore.setDate(currentDate.getDate() - 2))
+    setDayBefore(new Date(newDayBefore))
+    setDayAfter(dayAfter.setDate(currentDate.getDate() + 1))
+    setDayBefore(new Date(newDayBefore))
+    setDayAfter(new Date(newDayAfter))
+  }
+
   return (
     <div className={`bg-light-purple-2 h-screen flex`}>
       {taskFormOpen || categoryFormOpen ? <div className='fixed h-screen w-screen bg-white opacity-60'></div> : <></>}
       <SideMenu />
       <div className='pt-10 pb-5 px-14 w-full flex flex-col'>
-        <div className='flex items-center justify-between mb-8'>
+        <div className='flex items-center justify-between mb-10'>
           {/* <div className='flex'> */}
             <div className='flex items-center'>
-              <div className='text-xl text-gray-4'>{dayBefore.toLocaleDateString(undefined, options)}</div>
-              <div className='text-3xl mx-8 font-medium flex flex-col text-gray-5'>{currentDate.toLocaleDateString(undefined, options)}
+              <button onClick={getDateBefore} className='text-xl text-gray-4 transition hover:text-gray-5'>{dayBefore.toLocaleDateString(undefined, options)}</button>
+              <button className='text-3xl mx-8 font-medium flex flex-col text-gray-5'>{currentDate.toLocaleDateString(undefined, options)}
                 <div className='flex justify-center'>
                   <div className='border-b-3 border-light-purple-1 pb-2 w-1/3'></div>
                 </div>
-              </div>
-              <div className='text-xl text-gray-4'>{dayAfter.toLocaleDateString(undefined, options)}</div>
+              </button>
+              <button onClick={getDateAfter} className='text-xl text-gray-4 hover:text-gray-5'>{dayAfter.toLocaleDateString(undefined, options)}</button>
             </div>
             <div className='flex items-center'>
               <button onClick={() => setTaskFormOpen(true)} className='font-medium bg-light-purple-1 text-white py-3 px-5 rounded-md shadow-md flex items-center transition hover:bg-dark-purple-2'><FontAwesomeIcon className='mr-3' icon={faPlus} size='sm' />
@@ -116,8 +144,8 @@ const DashboardPage = () => {
                             </select>
                           </div>
                           <div className='flex flex-col w-1/2 ml-2'>
-                            <label className='mb-2'>Deadline</label>
-                            <input onChange={(e) => setTaskDeadline(e.target.value)} value={taskDeadline} type="date" className='border-1 border-gray-3 rounded-md py-2 px-3' />
+                            <label className='mb-2'>Due Date & Time</label>
+                            <input onChange={(e) => setTaskDeadline(e.target.value)} value={taskDeadline} type="datetime-local" className='border-1 border-gray-3 rounded-md py-2 px-3' />
                           </div>
                         </div>
                         <div className='flex justify-end font-medium'>
@@ -171,10 +199,12 @@ const DashboardPage = () => {
                   let categoryColor = user.categories.find((taskCat) => taskCat.name == task.category)
 
                   return <div key={index}>
-                    <div className={`${index !== 0 ? 'hidden' : 'mb-2 font-medium uppercase'} flex items-center`}><div className={`${colorVariants[categoryColor.color].bg} mr-2 p-1 rounded-full`}></div> {task.category}</div>
-                    <div className={`${index !== 0 ? '' : 'mb-6'} bg-white drop-shadow-md px-4 py-5 rounded-sm`}>
-                      <div className={`border-l-4 ${colorVariants[categoryColor.color].border} pl-4`}>
-                        <div className='font-medium'>{task.name}</div>
+                    <div className={`${index !== 0 ? 'hidden' : 'mb-5 font-medium uppercase'} flex items-center`}><div className={`${colorVariants[categoryColor.color].bg} mr-2 p-1 rounded-full`}></div> {task.category}</div>
+                    <div className={`${index !== 0 ? '' : 'mb-4'} bg-white drop-shadow-md px-4 py-5 rounded`}>
+                      <div className={`border-l-4 ${colorVariants[categoryColor.color].border} pl-5 font-medium`}>
+                        <div className='mb-1'>{task.name}</div>
+                        <div className='text-gray-7 mb-4 font-normal'>{task.description}</div>
+                        <div className={`${colorVariants[categoryColor.color].text}`}>{new Date(task.deadline).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}</div>
                       </div>
                     </div>
                   </div>
