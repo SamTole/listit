@@ -1,5 +1,5 @@
 import express from "express";
-import { signup, login, logout, addCategory, addTask, checkAuth } from '../controllers/auth.controller.js';
+import { signup, login, logout, addCategory, addTask, completeTask, checkAuth } from '../controllers/auth.controller.js';
 import { verifyToken } from "../middleware/verifyToken.js";
 
 const router = express.Router();
@@ -12,6 +12,7 @@ router.post("/signup", signup);
 router.post("/login", login);
 router.post("/addCategory", verifyToken, addCategory);
 router.post("/addTask", verifyToken, addTask);
+router.post("/completeTask", verifyToken, completeTask);
 router.post("/logout", logout);
 
 export default router;

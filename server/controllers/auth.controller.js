@@ -1,6 +1,7 @@
 import { User } from '../models/user.model.js';
 import { generateTokenAndSetCookie } from '../utils/generateTokenAndSetCookie.js'
 import bcrypt from 'bcryptjs';
+import { ObjectId } from 'mongodb';
 
 export const signup = async (req, res) => {
   const {email, password, name} = req.body;
@@ -107,7 +108,7 @@ export const addTask = async (req, res) => {
   const { taskName, taskDescription, taskCategory, taskDeadline } = req.body
 
   try {
-    await User.findByIdAndUpdate(req.userId, {$push: {tasks: {name: taskName, description: taskDescription, category: taskCategory, deadline: taskDeadline}}})    
+    await User.findByIdAndUpdate(req.userId, {$push: {tasks: {name: taskName, description: taskDescription, category: taskCategory, deadline: taskDeadline, complete: false}}})    
     const user = await User.findById(req.userId)
 
     res.status(200).json({
@@ -121,6 +122,53 @@ export const addTask = async (req, res) => {
   } catch (error) {
     console.log("Error adding task.");
     res.status(400).json({success: false, message: error.message})
+  }
+}
+
+export const completeTask = async (req, res) => {
+  try {
+    const result = await User.findByIdAndUpdate(
+      req.userId
+    ,
+    {
+      $set: {
+        'tasks.$[task].complete': true
+      }
+    },
+    {
+      arrayFilters: [
+        {"task.name": req.body.name}
+      ]
+    }
+  )
+
+  // console.log(result)
+
+    // await User.findByIdAndUpdate(
+    //   req.userId,
+    //   {$set: {"tasks.$[task].complete": true},
+    //   arrayFilters: [
+    //     {"task._id": req.taskId}
+    //   ]
+    // })   
+
+    // console.log('req', req)
+    // const query = { _id: req.userId }
+    // const query = await User.findById(req.userId)
+    
+    // const updateDocument = {
+    //   $set: { "tasks.$.complete": true }
+    // }
+    
+
+
+    // const result = await User.updateOne(query, updateDocument)
+    // console.log(result)
+    // console.log(query)
+    // await User.findByIdAndUpdate(req.userId, {$set: {'tasks.$': {}}}) 
+    // await User.updateOne({_id: req.userId}, {$set: {'tasks': }})
+  } catch (error) {
+    console.log('err', error)
   }
 }
 

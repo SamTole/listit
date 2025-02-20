@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useAuthStore } from '../store/authStore'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleLeft, faAngleRight, faPlus, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faAngleLeft, faAngleRight, faPlus, faXmark, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import SideMenu from '../components/SideMenu';
 import FormBtn from '../components/FormBtn';
 
@@ -19,7 +19,8 @@ const DashboardPage = () => {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [dayBefore, setDayBefore] = useState(new Date())
   const [dayAfter, setDayAfter] = useState(new Date())
-  const { user, logout, addCategory, addTask } = useAuthStore();
+  const [taskCompleteId, setTaskCompleteId] = useState('')
+  const { user, logout, addCategory, addTask, completeTask } = useAuthStore();
 
   const colorVariants = {
     red: {bg: 'bg-red-category', border: 'border-red-category', text: 'text-red-category'},
@@ -67,6 +68,11 @@ const DashboardPage = () => {
   const handleTaskSubmit = async (e) => {
     e.preventDefault()
     await addTask(taskName, taskDescription, taskCategory, taskDeadline)
+  }
+
+  const markTaskComplete = async (name) => {
+    // setTaskCompleteId(taskId)
+    await completeTask(name)
   }
 
   const getDateBefore = () => {
@@ -201,12 +207,13 @@ const DashboardPage = () => {
 
                   return <div key={index}>
                     <div className={`${index !== 0 ? 'hidden' : 'mb-5 font-medium uppercase'} flex items-center`}><div className={`${colorVariants[categoryColor.color].bg} mr-2 p-1 rounded-full`}></div> {task.category}</div>
-                    <div className={`${index !== 0 ? '' : 'mb-4'} bg-white drop-shadow-md px-4 py-5 rounded`}>
+                    <div className={`${index !== 0 ? '' : 'mb-4'} bg-white drop-shadow-md px-4 py-5 rounded flex items-center justify-between`}>
                       <div className={`border-l-4 ${colorVariants[categoryColor.color].border} pl-5 font-medium`}>
                         <div className='mb-1'>{task.name}</div>
                         <div className='text-gray-7 mb-4 font-normal'>{task.description}</div>
                         <div className={`${colorVariants[categoryColor.color].text}`}>{new Date(task.deadline).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}</div>
                       </div>
+                      <button onClick={(e) => markTaskComplete(task.name)}><FontAwesomeIcon className={`${colorVariants[categoryColor.color].check} text-gray-8 bg-gray-2 rounded-full mr-5 transition hover:text-green-category hover:bg-white`} icon={faCheckCircle} size='4x' /></button>
                     </div>
                   </div>
                 })}</div>
