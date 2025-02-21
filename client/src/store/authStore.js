@@ -108,6 +108,20 @@ export const useAuthStore = create((set) => ({
     }
   },
 
+  incompleteTask: async (name) => {
+    try {
+      const response = await axios.post(`${API_URL}/incompleteTask`, {name})
+
+      set({
+        user: response.data.user,
+        isAuthenticated: true,
+        isLoading: false,
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
   logout: async () => {
     set({ isLoading: true, error: null });
 

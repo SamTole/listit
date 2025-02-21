@@ -19,7 +19,7 @@ const DashboardPage = () => {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [dayBefore, setDayBefore] = useState(new Date())
   const [dayAfter, setDayAfter] = useState(new Date())
-  const { user, logout, addCategory, addTask, completeTask } = useAuthStore();
+  const { user, logout, addCategory, addTask, completeTask, incompleteTask } = useAuthStore();
 
   const colorVariants = {
     red: {bg: 'bg-red-category', border: 'border-red-category', text: 'text-red-category'},
@@ -77,8 +77,6 @@ const DashboardPage = () => {
     })
 
     filteredTasks = allTasks
-
-    console.log('fi', filteredTasks)
     
     setTasks(filteredTasks)
   }, [user, currentDate])
@@ -99,6 +97,10 @@ const DashboardPage = () => {
 
   const markTaskComplete = async (name) => {
     await completeTask(name)
+  }
+
+  const markTaskIncomplete = async (name) => {
+    await incompleteTask(name)
   }
 
   const getDateBefore = () => {
@@ -233,7 +235,7 @@ const DashboardPage = () => {
 
                   return <div key={index}>
                     <div className={`${index !== 0 ? 'hidden' : 'mb-5 font-medium uppercase'} flex items-center`}><div className={`${colorVariants[categoryColor.color].bg} mr-2 p-1 rounded-full`}></div> {task.category}</div>
-                    <div className={`${index > 0 ? 'mt-4' : ''} ${task.complete ? 'bg-green-1' : 'bg-white'} drop-shadow-md px-4 py-5 rounded flex items-center justify-between`}>
+                    <div className={`${index > 0 ? 'mt-5' : ''} ${task.complete ? 'bg-green-1' : 'bg-white'} drop-shadow-md px-4 py-5 rounded flex items-center justify-between`}>
                       <div className={`border-l-4 ${task.complete ? 'border-green-category' : colorVariants[categoryColor.color].border} pl-5 font-medium`}>
                         <div className='mb-1'>{task.name}</div>
                         <div className='text-gray-7 mb-4 font-normal'>{task.description}</div>
@@ -241,7 +243,7 @@ const DashboardPage = () => {
                       </div>
                       {
                         task.complete ?
-                          <button onClick={(e) => markTaskComplete(task.name)}><FontAwesomeIcon className={`text-green-category bg-white rounded-full mr-5 transition hover:text-green-category hover:bg-white`} icon={faCheckCircle} size='4x' /></button>
+                          <button onClick={(e) => markTaskIncomplete(task.name)}><FontAwesomeIcon className={`text-green-category bg-white rounded-full mr-5 transition hover:text-red-category hover:bg-white`} icon={faCheckCircle} size='4x' /></button>
                         :
                           <button onClick={(e) => markTaskComplete(task.name)}><FontAwesomeIcon className={`text-gray-8 bg-gray-2 rounded-full mr-5 transition hover:text-green-category hover:bg-white`} icon={faCheckCircle} size='4x' /></button>
                       }

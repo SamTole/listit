@@ -146,7 +146,30 @@ export const completeTask = async (req, res) => {
       }
     })
   } catch (error) {
-    console.log("Error completing task.");
+    console.log("Error marking task complete.");
+    res.status(400).json({success: false, message: error.message})
+  }
+}
+
+export const incompleteTask = async (req, res) => {
+  try {
+    await User.findByIdAndUpdate(
+      req.userId,
+      {$set: {'tasks.$[task].complete': false}},
+      {arrayFilters: [{"task.name": req.body.name}]}
+    )
+    const user = await User.findById(req.userId)
+
+    res.status(200).json({
+      success: true,
+      message: "Task marked incompleted.",
+      user: {
+        ...user._doc,
+        password: null,
+      }
+    })
+  } catch (error) {
+    console.log("Error marking task incomplete.");
     res.status(400).json({success: false, message: error.message})
   }
 }
