@@ -95,7 +95,14 @@ export const useAuthStore = create((set) => ({
 
   completeTask: async (name) => {
     try {
+      // Make sure to prevent same task name from being submitted
       const response = await axios.post(`${API_URL}/completeTask`, {name})
+
+      set({
+        user: response.data.user,
+        isAuthenticated: true,
+        isLoading: false,
+      })
     } catch (error) {
       console.log(error)
     }

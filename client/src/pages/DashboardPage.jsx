@@ -19,7 +19,6 @@ const DashboardPage = () => {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [dayBefore, setDayBefore] = useState(new Date())
   const [dayAfter, setDayAfter] = useState(new Date())
-  const [taskCompleteId, setTaskCompleteId] = useState('')
   const { user, logout, addCategory, addTask, completeTask } = useAuthStore();
 
   const colorVariants = {
@@ -52,6 +51,34 @@ const DashboardPage = () => {
       arr = arr.filter((task) => new Date(task.deadline).toLocaleDateString() == currentDate.toLocaleDateString())
       filteredTasks.push(arr)
     })
+
+    filteredTasks.forEach((taskArr) => {
+      taskArr.forEach((task) => {
+        task.deadline = new Date(task.deadline)
+      })
+    })
+
+    filteredTasks.forEach((taskArr) => {
+      taskArr.sort((a, b) => a.deadline - b.deadline)
+    })
+    
+    let allTasks = []
+    filteredTasks.forEach((taskArr) => {
+      let completeTasks = []
+      for (let i = 0; i < taskArr.length; i++) {
+        if (taskArr[i].complete) {
+          completeTasks.push(taskArr[i])
+          taskArr.splice(i, 1)[0]
+          i--
+        }
+      }
+
+      allTasks.push(taskArr.concat(completeTasks))
+    })
+
+    filteredTasks = allTasks
+
+    console.log('fi', filteredTasks)
     
     setTasks(filteredTasks)
   }, [user, currentDate])
@@ -71,7 +98,6 @@ const DashboardPage = () => {
   }
 
   const markTaskComplete = async (name) => {
-    // setTaskCompleteId(taskId)
     await completeTask(name)
   }
 
@@ -207,13 +233,18 @@ const DashboardPage = () => {
 
                   return <div key={index}>
                     <div className={`${index !== 0 ? 'hidden' : 'mb-5 font-medium uppercase'} flex items-center`}><div className={`${colorVariants[categoryColor.color].bg} mr-2 p-1 rounded-full`}></div> {task.category}</div>
-                    <div className={`${index !== 0 ? '' : 'mb-4'} bg-white drop-shadow-md px-4 py-5 rounded flex items-center justify-between`}>
-                      <div className={`border-l-4 ${colorVariants[categoryColor.color].border} pl-5 font-medium`}>
+                    <div className={`${index > 0 ? 'mt-4' : ''} ${task.complete ? 'bg-green-1' : 'bg-white'} drop-shadow-md px-4 py-5 rounded flex items-center justify-between`}>
+                      <div className={`border-l-4 ${task.complete ? 'border-green-category' : colorVariants[categoryColor.color].border} pl-5 font-medium`}>
                         <div className='mb-1'>{task.name}</div>
                         <div className='text-gray-7 mb-4 font-normal'>{task.description}</div>
-                        <div className={`${colorVariants[categoryColor.color].text}`}>{new Date(task.deadline).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}</div>
+                        <div className={`${task.complete ? 'text-green-2' : colorVariants[categoryColor.color].text}`}>{new Date(task.deadline).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}</div>
                       </div>
-                      <button onClick={(e) => markTaskComplete(task.name)}><FontAwesomeIcon className={`${colorVariants[categoryColor.color].check} text-gray-8 bg-gray-2 rounded-full mr-5 transition hover:text-green-category hover:bg-white`} icon={faCheckCircle} size='4x' /></button>
+                      {
+                        task.complete ?
+                          <button onClick={(e) => markTaskComplete(task.name)}><FontAwesomeIcon className={`text-green-category bg-white rounded-full mr-5 transition hover:text-green-category hover:bg-white`} icon={faCheckCircle} size='4x' /></button>
+                        :
+                          <button onClick={(e) => markTaskComplete(task.name)}><FontAwesomeIcon className={`text-gray-8 bg-gray-2 rounded-full mr-5 transition hover:text-green-category hover:bg-white`} icon={faCheckCircle} size='4x' /></button>
+                      }
                     </div>
                   </div>
                 })}</div>
