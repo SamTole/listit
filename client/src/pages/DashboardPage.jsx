@@ -138,7 +138,7 @@ const DashboardPage = () => {
   }
 
   return (
-    <div className={`bg-light-purple-2 h-screen flex`}>
+    <div className={`bg-gray-9 h-screen flex`}>
       {taskFormOpen || categoryFormOpen ? <div className='fixed h-screen w-screen bg-white opacity-60'></div> : <></>}
       <SideMenu />
       <div className='pt-10 pb-5 px-14 w-full flex flex-col'>
@@ -236,19 +236,16 @@ const DashboardPage = () => {
           <div className='tasks-container w-full h-full absolute top-0 left-0'>
             {
               tasks.map((taskCategory, index) => {
-                return <div key={index} className={`${!taskCategory.length ? 'hidden' : ''} bg-gray-6 h-fit rounded-md shadow-sm py-6 px-5`}>{taskCategory.map((task, index) => {
+                return <div key={index} className={`${!taskCategory.length ? 'hidden' : ''} h-fit py-6 px-5`}>{taskCategory.map((task, index) => {
                   let categoryColor = user.categories.find((taskCat) => taskCat.name == task.category)
 
                   return <div key={index}>
-                    {task.firstCompleted ? <div className='mt-5 text-center text-gray-7 font-medium'>COMPLETED</div> : <></>}
-                    <div className={`${index !== 0 ? 'hidden' : 'mb-5 font-medium uppercase'} flex items-center justify-between`}>
-                      <div className='flex items-center'>
-                        <div className={`${colorVariants[categoryColor.color].bg} mr-2 p-1 rounded-full`}></div><div>{task.category}</div>
-                      </div>
-                      <FontAwesomeIcon icon={faEllipsis} size='lg' className='text-gray-7' />
+                    <div className={`${index !== 0 ? 'hidden' : 'mb-3 font-medium uppercase'} ${colorVariants[categoryColor.color].bg} flex items-center justify-between px-7 py-5 rounded-sm shadow text-white`}>
+                      <div>{task.category}</div>           
+                      <FontAwesomeIcon icon={faEllipsis} size='lg' />
                     </div>
-                    <div className={`${index > 0 ? 'mt-5' : ''} ${task.complete ? 'bg-green-1' : 'bg-white'} drop-shadow-md px-4 py-5 rounded flex items-center justify-between`}>
-                      <div className={`border-l-4 ${task.complete ? 'border-green-category' : colorVariants[categoryColor.color].border} pl-5 font-medium`}>
+                    <div className={`${index > 0 ? 'mt-3' : ''} ${task.complete ? 'bg-green-1' : 'bg-white'} border-l-4 ${task.complete ? 'border-green-2' : colorVariants[categoryColor.color].border} drop-shadow-md px-1 py-5 rounded rounded-l-none flex items-center justify-between`}>
+                      <div className={`pl-5 font-medium`}>
                         <div className='mb-1'>{task.name}</div>
                         <div className='text-gray-7 mb-4 font-normal'>{task.description}</div>
                         <div className={`${task.complete ? 'text-green-2' : colorVariants[categoryColor.color].text}`}>{new Date(task.deadline).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}</div>
