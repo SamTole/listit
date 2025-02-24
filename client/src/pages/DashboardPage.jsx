@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useAuthStore } from '../store/authStore'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleLeft, faAngleRight, faPlus, faXmark, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import { faAngleLeft, faAngleRight, faPlus, faXmark, faCheckCircle, faEllipsis } from '@fortawesome/free-solid-svg-icons'
 import SideMenu from '../components/SideMenu';
 import FormBtn from '../components/FormBtn';
 
@@ -65,8 +65,13 @@ const DashboardPage = () => {
     let allTasks = []
     filteredTasks.forEach((taskArr) => {
       let completeTasks = []
+      let firstTaskCompleted = false
       for (let i = 0; i < taskArr.length; i++) {
         if (taskArr[i].complete) {
+          if (!firstTaskCompleted) {
+            firstTaskCompleted = true
+            taskArr[i].firstCompleted = true
+          }
           completeTasks.push(taskArr[i])
           taskArr.splice(i, 1)[0]
           i--
@@ -77,6 +82,7 @@ const DashboardPage = () => {
     })
 
     filteredTasks = allTasks
+    console.log('all', allTasks)
     
     setTasks(filteredTasks)
   }, [user, currentDate])
@@ -234,7 +240,13 @@ const DashboardPage = () => {
                   let categoryColor = user.categories.find((taskCat) => taskCat.name == task.category)
 
                   return <div key={index}>
-                    <div className={`${index !== 0 ? 'hidden' : 'mb-5 font-medium uppercase'} flex items-center`}><div className={`${colorVariants[categoryColor.color].bg} mr-2 p-1 rounded-full`}></div> {task.category}</div>
+                    {task.firstCompleted ? <div className='mt-5 text-center text-gray-7 font-medium'>COMPLETED</div> : <></>}
+                    <div className={`${index !== 0 ? 'hidden' : 'mb-5 font-medium uppercase'} flex items-center justify-between`}>
+                      <div className='flex items-center'>
+                        <div className={`${colorVariants[categoryColor.color].bg} mr-2 p-1 rounded-full`}></div><div>{task.category}</div>
+                      </div>
+                      <FontAwesomeIcon icon={faEllipsis} size='lg' className='text-gray-7' />
+                    </div>
                     <div className={`${index > 0 ? 'mt-5' : ''} ${task.complete ? 'bg-green-1' : 'bg-white'} drop-shadow-md px-4 py-5 rounded flex items-center justify-between`}>
                       <div className={`border-l-4 ${task.complete ? 'border-green-category' : colorVariants[categoryColor.color].border} pl-5 font-medium`}>
                         <div className='mb-1'>{task.name}</div>

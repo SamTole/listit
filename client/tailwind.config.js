@@ -38,6 +38,7 @@ export default {
       'gray-6': '#F9F9F9',
       'gray-7': '#878787',
       'gray-8': '#EBEBEB',
+      'gray-9': '#f6f7fb',
       'green-1': '#C5EDC5',
       'green-2': '#5AAA59',
       'red-1': '#FF6363',
