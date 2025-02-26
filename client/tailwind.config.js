@@ -41,6 +41,7 @@ export default {
       'gray-9': '#f2f5fa',
       'green-1': '#C5EDC5',
       'green-2': '#5AAA59',
+      'green-3': '#A5CFA5',
       'red-1': '#FF6363',
       'red-category': '#EC585A',
       'red-check': '#F2E3E3',

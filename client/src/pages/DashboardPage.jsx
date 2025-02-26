@@ -140,7 +140,7 @@ const DashboardPage = () => {
 
   return (
     <div className={`bg-light-purple-2 h-screen flex flex-col`}>
-      {taskFormOpen || categoryFormOpen ? <div className='fixed h-screen w-screen bg-white opacity-60'></div> : <></>}
+      {taskFormOpen || categoryFormOpen ? <div className='fixed h-screen w-screen bg-white opacity-60 z-10'></div> : <></>}
       <Menu />
       <div className='flex items-center justify-between px-16 py-8'>
         {/* <div className='flex'> */}
@@ -245,20 +245,20 @@ const DashboardPage = () => {
                       <div>{task.category}</div>           
                       <FontAwesomeIcon icon={faEllipsis} size='lg' />
                     </div>
-                    <div className={`${index > 0 ? 'mt-3' : ''} ${task.complete ? 'bg-green-1' : 'bg-white'} border-l-4 ${task.complete ? 'border-green-2' : colorVariants[categoryColor.color].border} drop-shadow-md p-5 rounded rounded-l-none flex items-center`}>
+                    <div onClick={() => setTaskFormOpen(true)} className={`${index > 0 ? 'mt-3' : ''} ${task.complete ? 'bg-green-1 transition hover:bg-green-3' : 'bg-white transition hover:bg-gray-3'} border-l-4 ${task.complete ? 'border-green-2' : colorVariants[categoryColor.color].border} drop-shadow-md p-5 rounded rounded-l-none flex items-center cursor-pointer`}>
                       {
                         task.complete ?
-                          <button onClick={(e) => markTaskIncomplete(task.name)}>
+                          <button onClick={(e) => {markTaskIncomplete(task.name); e.stopPropagation()}}>
                             <FontAwesomeIcon className={`text-green-category bg-white rounded-full transition hover:text-red-category hover:bg-white`} icon={faCheckCircle} size='3x' />
                           </button>
                         :
-                          <button onClick={(e) => markTaskComplete(task.name)}>
+                          <button onClick={(e) => {markTaskComplete(task.name); ; e.stopPropagation()}}>
                             <FontAwesomeIcon className={`text-gray-8 bg-gray-2 rounded-full transition hover:text-green-category hover:bg-white`} icon={faCheckCircle} size='3x' />
                           </button>
                       }
                       <div className={`font-medium pl-5`}>
                         <div className='mb-1'>{task.name}</div>
-                        <div className='text-gray-7 mb-4 font-normal'>{task.description}</div>
+                        <div className='text-gray-7 mb-4 font-normal line-clamp-1'>{task.description}</div>
                         <div className={`${task.complete ? 'text-green-2' : colorVariants[categoryColor.color].text}`}>{new Date(task.deadline).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}</div>
                       </div>
                     </div>
