@@ -13,13 +13,14 @@ const DashboardPage = () => {
   const [categoryColor, setCategoryColor] = useState('')
   const [taskName, setTaskName] = useState('')
   const [taskDescription, setTaskDescription] = useState('')
-  const [taskCategory, setTaskCategory] = useState('')
+  const [taskCategory, setTaskCategory] = useState('default')
   const [taskDeadline, setTaskDeadline] = useState('')
   const [tasks, setTasks] = useState([])
   const [todaysDate, setTodaysDate] = useState(new Date())
   const [currentDate, setCurrentDate] = useState(new Date())
   const [dayBefore, setDayBefore] = useState(new Date())
   const [dayAfter, setDayAfter] = useState(new Date())
+  const [taskClicked, setTaskClicked] = useState(null)
   const { user, logout, addCategory, addTask, completeTask, incompleteTask } = useAuthStore();
 
   const colorVariants = {
@@ -88,6 +89,21 @@ const DashboardPage = () => {
     setTasks(filteredTasks)
   }, [user, currentDate])
 
+  useEffect(() => {
+    if (taskClicked) {
+      setTaskName(taskClicked.name)
+      setTaskDescription(taskClicked.description)
+      setTaskCategory(taskClicked.category)
+      let taskYear = taskClicked.deadline.getFullYear()
+      let taskDay = taskClicked.deadline.getUTCDate()
+
+      console.log(taskClicked.deadline)
+      console.log(taskDay)
+
+      // setTaskDeadline(taskClicked.deadline.toISOString().substring(0, 16))
+    }
+  }, [taskClicked])
+
   // const handleLogout = () => {
   //   logout();
   // }
@@ -100,6 +116,19 @@ const DashboardPage = () => {
   const handleTaskSubmit = async (e) => {
     e.preventDefault()
     await addTask(taskName, taskDescription, taskCategory, taskDeadline)
+    setTaskName('')
+    setTaskDescription('')
+    setTaskCategory('default')
+    setTaskDeadline('')
+  }
+
+  const handleTaskFormClosed = () => {
+    setTaskFormOpen(false)
+    setTaskName('')
+    setTaskDescription('')
+    setTaskCategory('default')
+    setTaskDeadline('')
+    setTaskClicked(null)
   }
 
   const markTaskComplete = async (name) => {
@@ -163,8 +192,8 @@ const DashboardPage = () => {
                 <div className='fixed top-0 left-0 h-screen w-screen flex justify-center items-center z-10'>
                   <div className='bg-white rounded-b-md rounded-t-sm overflow-clip w-1/3 shadow-xl shadow-light-purple-2'>
                     <div className='border-t-4 border-light-purple-1 bg-light-purple-2 py-4 px-4 text-light-purple-1 flex items-center justify-between'>
-                      <div>Add new task</div>
-                      <button onClick={() => setTaskFormOpen(false)}><FontAwesomeIcon className='text-gray-4 transition hover:text-light-purple-1' icon={faXmark} size='lg' /></button>
+                      <div>{taskClicked ? 'Edit Task' : 'Add New Task'}</div>
+                      <button onClick={handleTaskFormClosed}><FontAwesomeIcon className='text-gray-4 transition hover:text-light-purple-1' icon={faXmark} size='lg' /></button>
                     </div>
                     <form onSubmit={handleTaskSubmit} className='py-6 px-5 flex flex-col text-gray-5'>
                       <label className='mb-2'>Title</label>
@@ -175,7 +204,7 @@ const DashboardPage = () => {
                       <div className='flex items-center mb-8'>
                         <div className='flex flex-col w-1/2 mr-2'>
                           <label className='mb-2'>Category</label>
-                          <select onChange={(e) => setTaskCategory(e.target.value)} defaultValue={'default'} className='border-1 border-gray-3 rounded-md p-3'>
+                          <select onChange={(e) => setTaskCategory(e.target.value)} defaultValue={'default'} value={taskCategory} className='border-1 border-gray-3 rounded-md p-3'>
                           `<option value="default" disabled></option>
                             {
                               user.categories.map((category, index) => 
@@ -245,7 +274,7 @@ const DashboardPage = () => {
                       <div>{task.category}</div>           
                       <FontAwesomeIcon icon={faEllipsis} size='lg' />
                     </div>
-                    <div onClick={() => setTaskFormOpen(true)} className={`${index > 0 ? 'mt-3' : ''} ${task.complete ? 'bg-green-1 transition hover:bg-green-3' : 'bg-white transition hover:bg-gray-3'} border-l-4 ${task.complete ? 'border-green-2' : colorVariants[categoryColor.color].border} drop-shadow-md p-5 rounded rounded-l-none flex items-center cursor-pointer`}>
+                    <div onClick={() => {setTaskFormOpen(true); setTaskClicked(task)}} className={`${index > 0 ? 'mt-3' : ''} ${task.complete ? 'bg-green-1 transition hover:bg-green-3' : 'bg-white transition hover:bg-gray-3'} border-l-4 ${task.complete ? 'border-green-2' : colorVariants[categoryColor.color].border} drop-shadow-md p-5 rounded rounded-l-none flex items-center cursor-pointer`}>
                       {
                         task.complete ?
                           <button onClick={(e) => {markTaskIncomplete(task.name); e.stopPropagation()}}>
