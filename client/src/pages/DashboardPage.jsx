@@ -16,6 +16,7 @@ const DashboardPage = () => {
   const [taskCategory, setTaskCategory] = useState('')
   const [taskDeadline, setTaskDeadline] = useState('')
   const [tasks, setTasks] = useState([])
+  const [todaysDate, setTodaysDate] = useState(new Date())
   const [currentDate, setCurrentDate] = useState(new Date())
   const [dayBefore, setDayBefore] = useState(new Date())
   const [dayAfter, setDayAfter] = useState(new Date())
@@ -141,21 +142,21 @@ const DashboardPage = () => {
     <div className={`bg-light-purple-2 h-screen flex flex-col`}>
       {taskFormOpen || categoryFormOpen ? <div className='fixed h-screen w-screen bg-white opacity-60'></div> : <></>}
       <Menu />
-      <div className='flex items-center justify-between px-12 py-5 mb-5 border-gray-8'>
+      <div className='flex items-center justify-between px-16 py-8'>
         {/* <div className='flex'> */}
           <div className='flex items-center'>
-            <button onClick={getDateBefore} className='text-xl text-gray-4 transition hover:text-gray-5'>{dayBefore.toLocaleDateString(undefined, options)}</button>
-            <button className='text-3xl mx-8 font-medium flex flex-col text-gray-5'>{currentDate.toLocaleDateString(undefined, options)}
+            <button onClick={getDateBefore} className='text-2xl text-gray-4 transition hover:text-gray-5'>{todaysDate.toLocaleDateString() == dayBefore.toLocaleDateString() ? 'Today' : dayBefore.toLocaleDateString(undefined, options)}</button>
+            <button className='text-4xl mx-8 font-medium flex flex-col text-gray-5'>{todaysDate.toLocaleDateString() == currentDate.toLocaleDateString() ? 'Today' : currentDate.toLocaleDateString(undefined, options)}
               <div className='flex justify-center'>
                 <div className='border-b-3 border-light-purple-1 pb-2 w-1/3'></div>
               </div>
             </button>
-            <button onClick={getDateAfter} className='text-xl text-gray-4 hover:text-gray-5'>{dayAfter.toLocaleDateString(undefined, options)}</button>
+            <button onClick={getDateAfter} className='text-2xl text-gray-4 hover:text-gray-5'>{todaysDate.toLocaleDateString() == dayAfter.toLocaleDateString() ? 'Today' : dayAfter.toLocaleDateString(undefined, options)}</button>
           </div>
           <div className='flex items-center'>
-            <button onClick={() => setTaskFormOpen(true)} className='font-medium bg-light-purple-1 text-white py-3 px-5 rounded-md shadow-md flex items-center transition hover:bg-dark-purple-2'><FontAwesomeIcon className='mr-3' icon={faPlus} size='sm' />
+            <button onClick={() => setTaskFormOpen(true)} className='font-medium border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow-sm flex items-center transition hover:bg-light-purple-5 hover:border-light-purple-3'><FontAwesomeIcon className='mr-3' icon={faPlus} size='sm' />
             Task</button>
-            <button onClick={() => setCategoryFormOpen(true)} className='font-medium bg-light-purple-1 text-white py-3 px-5 rounded-md shadow-md flex items-center transition hover:bg-dark-purple-2 ml-3'><FontAwesomeIcon className='mr-4' icon={faPlus} size='sm' />
+            <button onClick={() => setCategoryFormOpen(true)} className='font-medium border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow-sm flex items-center transition hover:bg-light-purple-5 hover:border-light-purple-3 ml-3'><FontAwesomeIcon className='mr-4' icon={faPlus} size='sm' />
             Category</button>
             {
               taskFormOpen ? 
@@ -233,10 +234,10 @@ const DashboardPage = () => {
       </div>
       <div className='w-full flex flex-col grow min-h-0'>
         <div className='flex flex-col grow w-full overflow-x-auto'>
-          <div className='tasks-container w-full px-12'>
+          <div className='tasks-container w-full px-16'>
             {
               tasks.map((taskCategory, index) => {
-                return <div key={index} className={`${!taskCategory.length ? 'hidden' : ''} min-h-0 px-3 overflow-y-auto`}>{taskCategory.map((task, index) => {
+                return <div key={index} className={`${!taskCategory.length ? 'hidden' : ''} min-h-0 pr-3 overflow-y-auto`}>{taskCategory.map((task, index) => {
                   let categoryColor = user.categories.find((taskCat) => taskCat.name == task.category)
 
                   return <div key={index}>
@@ -244,18 +245,22 @@ const DashboardPage = () => {
                       <div>{task.category}</div>           
                       <FontAwesomeIcon icon={faEllipsis} size='lg' />
                     </div>
-                    <div className={`${index > 0 ? 'mt-3' : ''} ${task.complete ? 'bg-green-1' : 'bg-white'} border-l-4 ${task.complete ? 'border-green-2' : colorVariants[categoryColor.color].border} drop-shadow-md px-1 py-5 rounded rounded-l-none flex items-center justify-between`}>
-                      <div className={`pl-5 font-medium`}>
+                    <div className={`${index > 0 ? 'mt-3' : ''} ${task.complete ? 'bg-green-1' : 'bg-white'} border-l-4 ${task.complete ? 'border-green-2' : colorVariants[categoryColor.color].border} drop-shadow-md p-5 rounded rounded-l-none flex items-center`}>
+                      {
+                        task.complete ?
+                          <button onClick={(e) => markTaskIncomplete(task.name)}>
+                            <FontAwesomeIcon className={`text-green-category bg-white rounded-full transition hover:text-red-category hover:bg-white`} icon={faCheckCircle} size='3x' />
+                          </button>
+                        :
+                          <button onClick={(e) => markTaskComplete(task.name)}>
+                            <FontAwesomeIcon className={`text-gray-8 bg-gray-2 rounded-full transition hover:text-green-category hover:bg-white`} icon={faCheckCircle} size='3x' />
+                          </button>
+                      }
+                      <div className={`font-medium pl-5`}>
                         <div className='mb-1'>{task.name}</div>
                         <div className='text-gray-7 mb-4 font-normal'>{task.description}</div>
                         <div className={`${task.complete ? 'text-green-2' : colorVariants[categoryColor.color].text}`}>{new Date(task.deadline).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}</div>
                       </div>
-                      {
-                        task.complete ?
-                          <button onClick={(e) => markTaskIncomplete(task.name)}><FontAwesomeIcon className={`text-green-category bg-white rounded-full mr-5 transition hover:text-red-category hover:bg-white`} icon={faCheckCircle} size='4x' /></button>
-                        :
-                          <button onClick={(e) => markTaskComplete(task.name)}><FontAwesomeIcon className={`text-gray-8 bg-gray-2 rounded-full mr-5 transition hover:text-green-category hover:bg-white`} icon={faCheckCircle} size='4x' /></button>
-                      }
                     </div>
                   </div>
                 })}</div>
