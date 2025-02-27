@@ -26,13 +26,13 @@ const DashboardPage = () => {
   const { user, logout, addCategory, addTask, editTask, deleteTask, completeTask, incompleteTask } = useAuthStore();
 
   const colorVariants = {
-    red: {bg: 'bg-red-category', border: 'border-red-category', text: 'text-red-category'},
-    orange: {bg: 'bg-orange-category', border: 'border-orange-category', text: 'text-orange-category'},
-    yellow: {bg: 'bg-yellow-category', border: 'border-yellow-category', text: 'text-yellow-category'},
-    green: {bg: 'bg-green-category', border: 'border-green-category', text: 'text-green-category'},
-    blue: {bg: 'bg-blue-category', border: 'border-blue-category', text: 'text-blue-category'},
-    purple: {bg: 'bg-purple-category', border: 'border-purple-category', text: 'text-purple-category'},
-    pink: {bg: 'bg-pink-category', border: 'border-pink-category', text: 'text-pink-category'},
+    red: {bg: 'bg-red-category', border: 'border-red-category', text: 'text-red-category', ellipsisHover: 'hover:bg-red-2'},
+    orange: {bg: 'bg-orange-category', border: 'border-orange-category', text: 'text-orange-category', ellipsisHover: 'hover:bg-orange-1'},
+    yellow: {bg: 'bg-yellow-category', border: 'border-yellow-category', text: 'text-yellow-category', ellipsisHover: 'hover:bg-yellow-1'},
+    green: {bg: 'bg-green-category', border: 'border-green-category', text: 'text-green-category', ellipsisHover: 'hover:bg-green-4'},
+    blue: {bg: 'bg-blue-category', border: 'border-blue-category', text: 'text-blue-category', ellipsisHover: 'hover:bg-blue-1'},
+    purple: {bg: 'bg-purple-category', border: 'border-purple-category', text: 'text-purple-category', ellipsisHover: 'hover:bg-purple-1'},
+    pink: {bg: 'bg-pink-category', border: 'border-pink-category', text: 'text-pink-category', ellipsisHover: 'hover:bg-pink-1'},
   }
 
   const options = {
@@ -293,8 +293,10 @@ const DashboardPage = () => {
 
                   return <div key={index}>
                     <div className={`${index !== 0 ? 'hidden' : 'mb-3 font-medium uppercase'} ${colorVariants[categoryColor.color].bg} flex items-center justify-between px-7 py-5 rounded-sm shadow text-white`}>
-                      <div>{task.category}</div>           
-                      <FontAwesomeIcon icon={faEllipsis} size='lg' />
+                      <div>{task.category}</div>     
+                      <button className={`py-1 px-2 rounded-full transition ${colorVariants[categoryColor.color].ellipsisHover}`}>
+                        <FontAwesomeIcon icon={faEllipsis} size='lg' />
+                      </button>      
                     </div>
                     <div onClick={() => {setTaskFormOpen(true); setTaskClicked(task)}} className={`${index > 0 ? 'mt-3' : ''} ${task.complete ? 'bg-green-1 transition hover:bg-green-3' : 'bg-white transition hover:bg-gray-3'} border-l-4 ${task.complete ? 'border-green-2' : colorVariants[categoryColor.color].border} drop-shadow-md p-5 rounded rounded-l-none flex items-center cursor-pointer`}>
                       {
@@ -308,7 +310,7 @@ const DashboardPage = () => {
                           </button>
                       }
                       <div className={`font-medium pl-5`}>
-                        <div className='mb-1'>{task.name}</div>
+                        <div className='mb-1 line-clamp-1'>{task.name}</div>
                         <div className='text-gray-7 mb-4 font-normal line-clamp-1'>{task.description}</div>
                         <div className={`${task.complete ? 'text-green-2' : colorVariants[categoryColor.color].text}`}>{new Date(task.deadline).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}</div>
                       </div>
