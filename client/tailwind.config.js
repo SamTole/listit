@@ -43,6 +43,7 @@ export default {
       'green-2': '#5AAA59',
       'green-3': '#A5CFA5',
       'red-1': '#FF6363',
+      'red-2': '#DD5050',
       'red-category': '#EC585A',
       'red-check': '#F2E3E3',
       'orange-category': '#F9B555',

@@ -220,6 +220,11 @@ const DashboardPage = () => {
                         </div>
                       </div>
                       <div className='flex justify-end font-medium'>
+                        {
+                          taskClicked ?
+                            <button className='bg-red-1 text-white rounded-full px-5 py-2 w-1/3 shadow-md mr-2 transition hover:bg-red-2' type='submit'>Delete</button>
+                          : ''
+                        }
                         <button className='bg-light-purple-1 text-white rounded-full px-5 py-2 w-1/3 shadow-md transition hover:bg-dark-purple-2' type='submit'>Save</button>
                       </div>
                     </form>

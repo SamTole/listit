@@ -153,6 +153,8 @@ export const editTask = async (req, res) => {
   }
 }
 
+
+
 export const completeTask = async (req, res) => {
   try {
     await User.findByIdAndUpdate(
