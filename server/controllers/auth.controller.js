@@ -110,7 +110,7 @@ export const addTask = async (req, res) => {
   try {
     await User.findByIdAndUpdate(
       req.userId,
-      {$push: {tasks: {name: taskName, description: taskDescription, category: taskCategory, deadline: taskDeadline, complete: false}}}
+      {$push: {tasks: {id: new ObjectId().toString(), name: taskName, description: taskDescription, category: taskCategory, deadline: taskDeadline, complete: false}}}
     )    
     const user = await User.findById(req.userId)
 
@@ -128,12 +128,37 @@ export const addTask = async (req, res) => {
   }
 }
 
+export const editTask = async (req, res) => {
+  const { id, taskName, taskDescription, taskCategory, taskDeadline } = req.body
+
+  try {
+    await User.findByIdAndUpdate(
+      req.userId,
+      {$set: {'tasks.$[task].name': taskName, 'tasks.$[task].description': taskDescription, 'tasks.$[task].category': taskCategory, 'tasks.$[task].deadline': taskDeadline}},
+      {arrayFilters: [{"task.id": req.body.id}]}
+    )
+    const user = await User.findById(req.userId)
+
+    res.status(200).json({
+      success: true,
+      message: "Task edited successfully.",
+      user: {
+        ...user._doc,
+        password: null,
+      }
+    })
+  } catch (error) {
+    console.log("Error editing task.");
+    res.status(400).json({success: false, message: error.message})
+  }
+}
+
 export const completeTask = async (req, res) => {
   try {
     await User.findByIdAndUpdate(
       req.userId,
       {$set: {'tasks.$[task].complete': true}},
-      {arrayFilters: [{"task.name": req.body.name}]}
+      {arrayFilters: [{"task.id": req.body.id}]}
     )
     const user = await User.findById(req.userId)
 
@@ -156,7 +181,7 @@ export const incompleteTask = async (req, res) => {
     await User.findByIdAndUpdate(
       req.userId,
       {$set: {'tasks.$[task].complete': false}},
-      {arrayFilters: [{"task.name": req.body.name}]}
+      {arrayFilters: [{"task.id": req.body.id}]}
     )
     const user = await User.findById(req.userId)
 

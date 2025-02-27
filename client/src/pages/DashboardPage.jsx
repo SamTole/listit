@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleLeft, faAngleRight, faPlus, faXmark, faCheckCircle, faEllipsis } from '@fortawesome/free-solid-svg-icons'
 import Menu from '../components/Menu';
 import FormBtn from '../components/FormBtn';
+import moment from '../../node_modules/moment/src/moment'
 
 const DashboardPage = () => {
   const [taskFormOpen, setTaskFormOpen] = useState(false)
@@ -21,7 +22,7 @@ const DashboardPage = () => {
   const [dayBefore, setDayBefore] = useState(new Date())
   const [dayAfter, setDayAfter] = useState(new Date())
   const [taskClicked, setTaskClicked] = useState(null)
-  const { user, logout, addCategory, addTask, completeTask, incompleteTask } = useAuthStore();
+  const { user, logout, addCategory, addTask, editTask, completeTask, incompleteTask } = useAuthStore();
 
   const colorVariants = {
     red: {bg: 'bg-red-category', border: 'border-red-category', text: 'text-red-category'},
@@ -94,13 +95,7 @@ const DashboardPage = () => {
       setTaskName(taskClicked.name)
       setTaskDescription(taskClicked.description)
       setTaskCategory(taskClicked.category)
-      let taskYear = taskClicked.deadline.getFullYear()
-      let taskDay = taskClicked.deadline.getUTCDate()
-
-      console.log(taskClicked.deadline)
-      console.log(taskDay)
-
-      // setTaskDeadline(taskClicked.deadline.toISOString().substring(0, 16))
+      setTaskDeadline(moment(taskClicked.deadline).format('YYYY-MM-DDTHH:mm'))
     }
   }, [taskClicked])
 
@@ -115,11 +110,17 @@ const DashboardPage = () => {
 
   const handleTaskSubmit = async (e) => {
     e.preventDefault()
-    await addTask(taskName, taskDescription, taskCategory, taskDeadline)
-    setTaskName('')
-    setTaskDescription('')
-    setTaskCategory('default')
-    setTaskDeadline('')
+
+    if (taskClicked) {
+      await editTask(taskClicked.id, taskName, taskDescription, taskCategory, taskDeadline)
+    }
+    else {
+      await addTask(taskName, taskDescription, taskCategory, taskDeadline)
+      setTaskName('')
+      setTaskDescription('')
+      setTaskCategory('default')
+      setTaskDeadline('')
+    }
   }
 
   const handleTaskFormClosed = () => {
@@ -131,12 +132,12 @@ const DashboardPage = () => {
     setTaskClicked(null)
   }
 
-  const markTaskComplete = async (name) => {
-    await completeTask(name)
+  const markTaskComplete = async (id) => {
+    await completeTask(id)
   }
 
-  const markTaskIncomplete = async (name) => {
-    await incompleteTask(name)
+  const markTaskIncomplete = async (id) => {
+    await incompleteTask(id)
   }
 
   const getDateBefore = () => {
@@ -277,11 +278,11 @@ const DashboardPage = () => {
                     <div onClick={() => {setTaskFormOpen(true); setTaskClicked(task)}} className={`${index > 0 ? 'mt-3' : ''} ${task.complete ? 'bg-green-1 transition hover:bg-green-3' : 'bg-white transition hover:bg-gray-3'} border-l-4 ${task.complete ? 'border-green-2' : colorVariants[categoryColor.color].border} drop-shadow-md p-5 rounded rounded-l-none flex items-center cursor-pointer`}>
                       {
                         task.complete ?
-                          <button onClick={(e) => {markTaskIncomplete(task.name); e.stopPropagation()}}>
+                          <button onClick={(e) => {markTaskIncomplete(task.id); e.stopPropagation()}}>
                             <FontAwesomeIcon className={`text-green-category bg-white rounded-full transition hover:text-red-category hover:bg-white`} icon={faCheckCircle} size='3x' />
                           </button>
                         :
-                          <button onClick={(e) => {markTaskComplete(task.name); ; e.stopPropagation()}}>
+                          <button onClick={(e) => {markTaskComplete(task.id); ; e.stopPropagation()}}>
                             <FontAwesomeIcon className={`text-gray-8 bg-gray-2 rounded-full transition hover:text-green-category hover:bg-white`} icon={faCheckCircle} size='3x' />
                           </button>
                       }

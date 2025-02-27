@@ -93,10 +93,25 @@ export const useAuthStore = create((set) => ({
     }
   },
 
-  completeTask: async (name) => {
+  editTask: async (id, taskName, taskDescription, taskCategory, taskDeadline) => {
     try {
-      // Make sure to prevent same task name from being submitted
-      const response = await axios.post(`${API_URL}/completeTask`, {name})
+      const response = await axios.post(`${API_URL}/editTask`, {
+        id, taskName, taskDescription, taskCategory, taskDeadline
+      })
+
+      set({
+        user: response.data.user,
+        isAuthenticated: true,
+        isLoading: false,
+      }) 
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
+  completeTask: async (id) => {
+    try {
+      const response = await axios.post(`${API_URL}/completeTask`, {id})
 
       set({
         user: response.data.user,
@@ -108,9 +123,9 @@ export const useAuthStore = create((set) => ({
     }
   },
 
-  incompleteTask: async (name) => {
+  incompleteTask: async (id) => {
     try {
-      const response = await axios.post(`${API_URL}/incompleteTask`, {name})
+      const response = await axios.post(`${API_URL}/incompleteTask`, {id})
 
       set({
         user: response.data.user,
