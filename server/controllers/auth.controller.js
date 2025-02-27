@@ -87,7 +87,7 @@ export const addCategory = async (req, res) => {
   const { categoryName, categoryColor } = req.body
 
   try {
-    await User.findByIdAndUpdate(req.userId, {$push: {categories: {name: categoryName, color: categoryColor}}})    
+    await User.findByIdAndUpdate(req.userId, {$push: {categories: {name: categoryName, color: categoryColor, dateAdded: new Date()}}})    
     const user = await User.findById(req.userId);
 
     res.status(200).json({
@@ -153,7 +153,27 @@ export const editTask = async (req, res) => {
   }
 }
 
+export const deleteTask = async (req, res) => {
+  try {
+    await User.findByIdAndUpdate(
+      req.userId,
+      {$pull: {'tasks': {id: req.body.id}}},
+    )
+    const user = await User.findById(req.userId)
 
+    res.status(200).json({
+      success: true,
+      message: "Task deleted successfully.",
+      user: {
+        ...user._doc,
+        password: null,
+      }
+    })
+  } catch (error) {
+    console.log("Error deleting task.");
+    res.status(400).json({success: false, message: error.message})
+  }
+}
 
 export const completeTask = async (req, res) => {
   try {
