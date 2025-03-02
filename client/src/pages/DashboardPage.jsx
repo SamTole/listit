@@ -40,13 +40,15 @@ const DashboardPage = () => {
     month: 'short',
     day: 'numeric',
   }
-  
+
   useEffect(() => {
     setDayBefore(dayBefore.setDate(currentDate.getDate() - 1))
     setDayBefore(new Date(dayBefore))
     setDayAfter(dayAfter.setDate(currentDate.getDate() + 1))
     setDayAfter(new Date(dayAfter))
+  }, [])
 
+  useEffect(() => {
     const categories = [...new Set(user.tasks.map(task => task.category))]
     
     let filteredTasks = []
@@ -290,29 +292,24 @@ const DashboardPage = () => {
             {
               tasks.map((taskCategory, index) => {
                 return <div key={index} className={`${!taskCategory.length ? 'hidden' : ''} min-h-0 pr-3 overflow-y-auto relative`}>
-                  <div className='absolute bg-white text-gray-7 flex flex-col left-96 z-10 rounded shadow-md font-normal'>
-                    <button className='w-full text-left px-3 py-2 border-b-2 border-gray-3'>Edit Category</button>
-                    <button className='w-full text-left px-3 py-2'>Delete Category</button>
-                  </div>
-                  
                   {taskCategory.map((task, index) => {
                   let categoryColor = user.categories.find((taskCat) => taskCat.name == task.category)
 
                   return <div key={index}>
-                    <div className={`${index !== 0 ? 'hidden' : 'mb-3 font-medium'} ${colorVariants[categoryColor.color].bg} flex items-center justify-between px-7 py-5 rounded-sm shadow text-white`}>
+                    <div className={`${index !== 0 ? 'hidden' : 'mb-3 font-medium'} ${colorVariants[categoryColor.color].bg} flex items-center justify-between px-7 py-5 rounded-sm shadow text-white relative`}>
                       <div className='uppercase'>{task.category}</div>     
-                      <div className='relative'>
+                      {
+                        ellipsisClicked && (ellipsisClicked == task.category) ? 
+                          <div className='absolute right-0 top-14 bg-white text-gray-7 flex flex-col z-10 rounded shadow-md font-normal'>
+                            <button className='w-full text-left px-3 py-2 border-b-2 border-gray-3'>Edit Category</button>
+                            <button className='w-full text-left px-3 py-2'>Delete Category</button>
+                          </div>
+                        : ''
+                      } 
+                      <div>
                         <button onClick={() => setEllipsisClicked(task.category)} className={`py-1 px-2 rounded-full transition ${colorVariants[categoryColor.color].ellipsisHover}`}>
                           <FontAwesomeIcon icon={faEllipsis} size='lg' />
                         </button>     
-                        {/* {
-                          ellipsisClicked && (ellipsisClicked == task.category) ? 
-                            <div className='absolute bg-white text-gray-7 flex flex-col z-10 rounded shadow-md font-normal'>
-                              <button className='w-full text-left px-3 py-2 border-b-2 border-gray-3'>Edit Category</button>
-                              <button className='w-full text-left px-3 py-2'>Delete Category</button>
-                            </div>
-                          : ''
-                        }  */}
                       </div>
                     </div>
                     <div onClick={() => {setTaskFormOpen(true); setTaskClicked(task)}} className={`${index > 0 ? 'mt-3' : ''} ${task.complete ? 'bg-green-1 transition hover:bg-green-3' : 'bg-white transition hover:bg-gray-3'} border-l-4 ${task.complete ? 'border-green-2' : colorVariants[categoryColor.color].border} drop-shadow-md p-5 rounded rounded-l-none flex items-center cursor-pointer`}>
