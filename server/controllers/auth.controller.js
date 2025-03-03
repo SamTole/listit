@@ -87,7 +87,7 @@ export const addCategory = async (req, res) => {
   const { categoryName, categoryColor } = req.body
 
   try {
-    await User.findByIdAndUpdate(req.userId, {$push: {categories: {name: categoryName, color: categoryColor, dateAdded: new Date()}}})    
+    await User.findByIdAndUpdate(req.userId, {$push: {categories: {id: new ObjectId().toString(), name: categoryName, color: categoryColor, dateAdded: new Date()}}})    
     const user = await User.findById(req.userId);
 
     res.status(200).json({
@@ -100,6 +100,31 @@ export const addCategory = async (req, res) => {
     })
   } catch (error) {
     console.log("Error adding category.");
+    res.status(400).json({success: false, message: error.message})
+  }
+}
+
+export const editCategory = async (req, res) => {
+  const { id, categoryName, categoryColor } = req.body
+
+  try {
+    await User.findByIdAndUpdate(
+      req.userId,
+      {$set: {'categories.$[category].name': categoryName, 'categories.$[category].color': categoryColor}},
+      {arrayFilters: [{"category.id": req.body.id}]}
+    )
+    const user = await User.findById(req.userId)
+
+    res.status(200).json({
+      success: true,
+      message: "Category edited successfully.",
+      user: {
+        ...user._doc,
+        password: null,
+      }
+    })
+  } catch (error) {
+    console.log("Error editing category.");
     res.status(400).json({success: false, message: error.message})
   }
 }

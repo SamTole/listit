@@ -11,7 +11,7 @@ const DashboardPage = () => {
   const [taskFormOpen, setTaskFormOpen] = useState(false)
   const [categoryFormOpen, setCategoryFormOpen] = useState(false)
   const [categoryName, setCategoryName] = useState('')
-  const [categoryColor, setCategoryColor] = useState('')
+  const [categoryColor, setCategoryColor] = useState('default')
   const [taskName, setTaskName] = useState('')
   const [taskDescription, setTaskDescription] = useState('')
   const [taskCategory, setTaskCategory] = useState('default')
@@ -25,7 +25,7 @@ const DashboardPage = () => {
   const [deleteClicked, setDeleteClicked] = useState(false)
   // const [ellipsisClicked, setEllipsisClicked] = useState(null)
   const [editCategoriesClicked, setEditCategoriesClicked] = useState(false)
-  const { user, logout, addCategory, addTask, editTask, deleteTask, completeTask, incompleteTask } = useAuthStore()
+  const { user, logout, addCategory, editCategory, addTask, editTask, deleteTask, completeTask, incompleteTask } = useAuthStore()
 
   const colorVariants = {
     red: {bg: 'bg-red-category', border: 'border-red-category', text: 'text-red-category', ellipsisHover: 'hover:bg-red-2'},
@@ -55,15 +55,16 @@ const DashboardPage = () => {
     let filteredTasks = []
     let filteredCategories = []
     categories.forEach((category) => {
-      let cat = user.categories.find((userCat) => userCat.name == category)
+      let cat = user.categories.find((userCat) => userCat.id == category)
       cat.dateAdded = new Date(cat.dateAdded)
       filteredCategories.push(cat)
     })
 
     filteredCategories.sort((a, b) => a.dateAdded - b.dateAdded)
+    console.log('c', filteredCategories)
 
     filteredCategories.forEach((category) => {
-      let arr = user.tasks.filter((task) => task.category == category.name)
+      let arr = user.tasks.filter((task) => task.category == category.id)
       arr = arr.filter((task) => new Date(task.deadline).toLocaleDateString() == currentDate.toLocaleDateString())
       filteredTasks.push(arr)
     })
@@ -118,7 +119,13 @@ const DashboardPage = () => {
   
   const handleCategorySubmit = async (e) => {
     e.preventDefault()
-    await addCategory(categoryName, categoryColor)
+
+    if (editCategoriesClicked) {
+      await editCategory(taskCategory, categoryName, categoryColor)
+    }
+    else {
+      await addCategory(categoryName, categoryColor)
+    }
   }
 
   const handleTaskSubmit = async (e) => {
@@ -163,8 +170,7 @@ const DashboardPage = () => {
   const getEditCategoryNameColor = (taskValue) => {
     setTaskCategory(taskValue)
 
-    // prevent same name of colors
-    let category = user.categories.find(cat => cat.name == taskValue)
+    let category = user.categories.find(cat => cat.id == taskValue)
     setCategoryName(category.name)
     setCategoryColor(category.color)
   }
@@ -250,7 +256,7 @@ const DashboardPage = () => {
                           `<option value="default" disabled></option>
                             {
                               user.categories.map((category, index) => 
-                                <option key={index}>{category.name}</option>
+                                <option value={category.id} key={index}>{category.name}</option>
                               )
                             }
                           </select>
@@ -300,7 +306,7 @@ const DashboardPage = () => {
                               <option value="default" disabled></option>
                               {
                                 user.categories.map((category, index) => 
-                                  <option key={index}>{category.name}</option>
+                                  <option value={category.id} key={index}>{category.name}</option>
                                 )
                               }
                             </select>
@@ -345,11 +351,11 @@ const DashboardPage = () => {
               tasks.map((taskCategory, index) => {
                 return <div key={index} className={`${!taskCategory.length ? 'hidden' : ''} min-h-0 pr-3 overflow-y-auto relative`}>
                   {taskCategory.map((task, index) => {
-                  let categoryColor = user.categories.find((taskCat) => taskCat.name == task.category)
+                  let categoryColor = user.categories.find((taskCat) => taskCat.id == task.category)
 
                   return <div key={index}>
                     <div className={`${index !== 0 ? 'hidden' : 'mb-3 font-medium'} ${colorVariants[categoryColor.color].bg} flex items-center justify-between px-7 py-5 rounded-sm shadow text-white relative`}>
-                      <div className='uppercase'>{task.category}</div>     
+                      <div className='uppercase'>{categoryColor.name}</div>     
                       {/* {
                         ellipsisClicked && (ellipsisClicked == task.category) ? 
                           <OutsideClickHandler
