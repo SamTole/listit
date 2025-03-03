@@ -23,9 +23,10 @@ const DashboardPage = () => {
   const [dayAfter, setDayAfter] = useState(new Date())
   const [taskClicked, setTaskClicked] = useState(null)
   const [deleteClicked, setDeleteClicked] = useState(false)
+  const [deleteCategoryClicked, setDeleteCategoryClicked] = useState(false)
   // const [ellipsisClicked, setEllipsisClicked] = useState(null)
   const [editCategoriesClicked, setEditCategoriesClicked] = useState(false)
-  const { user, logout, addCategory, editCategory, addTask, editTask, deleteTask, completeTask, incompleteTask } = useAuthStore()
+  const { user, logout, addCategory, editCategory, deleteCategory, addTask, editTask, deleteTask, completeTask, incompleteTask } = useAuthStore()
 
   const colorVariants = {
     red: {bg: 'bg-red-category', border: 'border-red-category', text: 'text-red-category', ellipsisHover: 'hover:bg-red-2'},
@@ -121,7 +122,16 @@ const DashboardPage = () => {
     e.preventDefault()
 
     if (editCategoriesClicked) {
-      await editCategory(taskCategory, categoryName, categoryColor)
+      if (!deleteCategoryClicked) {
+        await editCategory(taskCategory, categoryName, categoryColor)
+      }
+      else {
+        await deleteCategory(taskCategory)
+        setDeleteCategoryClicked(false)
+        setTaskCategory('default')
+        setCategoryName('')
+        setCategoryColor('default')
+      }
     }
     else {
       await addCategory(categoryName, categoryColor)
@@ -136,7 +146,6 @@ const DashboardPage = () => {
         await editTask(taskClicked.id, taskName, taskDescription, taskCategory, taskDeadline)
       }
       else {
-        console.log('del', deleteClicked)
         await deleteTask(taskClicked.id)
         setDeleteClicked(false)
       }
@@ -330,6 +339,11 @@ const DashboardPage = () => {
                               <option value="pink" className='font-semibold text-pink-category'>Pink</option>
                             </select>
                             <div className='flex justify-end font-medium'>
+                              {
+                                editCategoriesClicked ?
+                                  <button onClick={() => setDeleteCategoryClicked(true)} className='bg-red-1 text-white rounded-full px-5 py-2 w-1/3 shadow-md mr-2 transition hover:bg-red-2' type='submit'>Delete</button>
+                                : ''
+                              }
                               <button className='bg-light-purple-1 text-white rounded-full px-5 py-2 w-1/3 shadow-md transition hover:bg-dark-purple-2' type='submit'>Save</button>
                             </div>
                           </div>
@@ -352,48 +366,50 @@ const DashboardPage = () => {
                 return <div key={index} className={`${!taskCategory.length ? 'hidden' : ''} min-h-0 pr-3 overflow-y-auto relative`}>
                   {taskCategory.map((task, index) => {
                   let categoryColor = user.categories.find((taskCat) => taskCat.id == task.category)
+                  
+                  if (categoryColor) {
+                    return <div key={index}>
+                      <div className={`${index !== 0 ? 'hidden' : 'mb-3 font-medium'} ${colorVariants[categoryColor.color].bg} flex items-center justify-between px-7 py-5 rounded-sm shadow text-white relative`}>
+                        <div className='uppercase'>{categoryColor.name}</div>     
+                        {/* {
+                          ellipsisClicked && (ellipsisClicked == task.category) ? 
+                            <OutsideClickHandler
+                              onOutsideClick={() => {
+                                setEllipsisClicked(null)
+                              }}>   
 
-                  return <div key={index}>
-                    <div className={`${index !== 0 ? 'hidden' : 'mb-3 font-medium'} ${colorVariants[categoryColor.color].bg} flex items-center justify-between px-7 py-5 rounded-sm shadow text-white relative`}>
-                      <div className='uppercase'>{categoryColor.name}</div>     
-                      {/* {
-                        ellipsisClicked && (ellipsisClicked == task.category) ? 
-                          <OutsideClickHandler
-                            onOutsideClick={() => {
-                              setEllipsisClicked(null)
-                            }}>   
-
-                            <div className='absolute right-0 top-14 bg-white text-gray-7 flex flex-col z-10 rounded shadow-md font-normal'>
-                              <button onClick={() => setEditCategoryClicked(task.category)} className='w-full text-left px-3 py-2 border-b-2 border-gray-3 transition hover:bg-gray-3'>Edit Category</button>
-                              <button className='w-full text-left px-3 py-2 transition hover:bg-gray-3'>Delete Category</button>
-                            </div>
-                          </OutsideClickHandler>              
-                        : ''
-                      }  */}
-                      {/* <div>
-                        <button onClick={() => setEllipsisClicked(task.category)} className={`py-1 px-2 rounded-full transition ${colorVariants[categoryColor.color].ellipsisHover}`}>
-                          <FontAwesomeIcon icon={faEllipsis} size='lg' />
-                        </button>     
-                      </div> */}
-                    </div>
-                    <div onClick={() => {setTaskFormOpen(true); setTaskClicked(task)}} className={`${index > 0 ? 'mt-3' : ''} ${task.complete ? 'bg-green-1 transition hover:bg-green-3' : 'bg-white transition hover:bg-gray-3'} border-l-4 ${task.complete ? 'border-green-2' : colorVariants[categoryColor.color].border} drop-shadow-md p-5 rounded rounded-l-none flex items-center cursor-pointer`}>
-                      {
-                        task.complete ?
-                          <button onClick={(e) => {markTaskIncomplete(task.id); e.stopPropagation()}}>
-                            <FontAwesomeIcon className={`text-green-category bg-white rounded-full transition hover:text-red-category hover:bg-white`} icon={faCheckCircle} size='3x' />
-                          </button>
-                        :
-                          <button onClick={(e) => {markTaskComplete(task.id); ; e.stopPropagation()}}>
-                            <FontAwesomeIcon className={`text-gray-8 bg-gray-2 rounded-full transition hover:text-green-category hover:bg-white`} icon={faCheckCircle} size='3x' />
-                          </button>
-                      }
-                      <div className={`font-medium pl-5`}>
-                        <div className='mb-1 line-clamp-1'>{task.name}</div>
-                        <div className='text-gray-7 mb-4 font-normal line-clamp-1'>{task.description}</div>
-                        <div className={`${task.complete ? 'text-green-2' : colorVariants[categoryColor.color].text}`}>{new Date(task.deadline).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}</div>
+                              <div className='absolute right-0 top-14 bg-white text-gray-7 flex flex-col z-10 rounded shadow-md font-normal'>
+                                <button onClick={() => setEditCategoryClicked(task.category)} className='w-full text-left px-3 py-2 border-b-2 border-gray-3 transition hover:bg-gray-3'>Edit Category</button>
+                                <button className='w-full text-left px-3 py-2 transition hover:bg-gray-3'>Delete Category</button>
+                              </div>
+                            </OutsideClickHandler>              
+                          : ''
+                        }  */}
+                        {/* <div>
+                          <button onClick={() => setEllipsisClicked(task.category)} className={`py-1 px-2 rounded-full transition ${colorVariants[categoryColor.color].ellipsisHover}`}>
+                            <FontAwesomeIcon icon={faEllipsis} size='lg' />
+                          </button>     
+                        </div> */}
+                      </div>
+                      <div onClick={() => {setTaskFormOpen(true); setTaskClicked(task)}} className={`${index > 0 ? 'mt-3' : ''} ${task.complete ? 'bg-green-1 transition hover:bg-green-3' : 'bg-white transition hover:bg-gray-3'} border-l-4 ${task.complete ? 'border-green-2' : colorVariants[categoryColor.color].border} drop-shadow-md p-5 rounded rounded-l-none flex items-center cursor-pointer`}>
+                        {
+                          task.complete ?
+                            <button onClick={(e) => {markTaskIncomplete(task.id); e.stopPropagation()}}>
+                              <FontAwesomeIcon className={`text-green-category bg-white rounded-full transition hover:text-red-category hover:bg-white`} icon={faCheckCircle} size='3x' />
+                            </button>
+                          :
+                            <button onClick={(e) => {markTaskComplete(task.id); ; e.stopPropagation()}}>
+                              <FontAwesomeIcon className={`text-gray-8 bg-gray-2 rounded-full transition hover:text-green-category hover:bg-white`} icon={faCheckCircle} size='3x' />
+                            </button>
+                        }
+                        <div className={`font-medium pl-5`}>
+                          <div className='mb-1 line-clamp-1'>{task.name}</div>
+                          <div className='text-gray-7 mb-4 font-normal line-clamp-1'>{task.description}</div>
+                          <div className={`${task.complete ? 'text-green-2' : colorVariants[categoryColor.color].text}`}>{new Date(task.deadline).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}</div>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  }
                 })}</div>
               })
             }

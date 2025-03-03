@@ -93,6 +93,20 @@ export const useAuthStore = create((set) => ({
     }
   },
 
+  deleteCategory: async (id) => {
+    try {
+      const response = await axios.post(`${API_URL}/deleteCategory`, {id})
+
+      set({
+        user: response.data.user,
+        isAuthenticated: true,
+        isLoading: false,
+      }) 
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
   addTask: async (taskName, taskDescription, taskCategory, taskDeadline) => {
     try {
       const response = await axios.post(`${API_URL}/addTask`, {

@@ -129,6 +129,34 @@ export const editCategory = async (req, res) => {
   }
 }
 
+export const deleteCategory = async (req, res) => {
+  try {
+    await User.findByIdAndUpdate(
+      req.userId,
+      {$pull: {'categories': {id: req.body.id}}},
+    )
+
+    await User.findByIdAndUpdate(
+      req.userId,
+      {$pull: {'tasks': {category: req.body.id}}},
+    )
+
+    const user = await User.findById(req.userId)
+
+    res.status(200).json({
+      success: true,
+      message: "Category deleted successfully.",
+      user: {
+        ...user._doc,
+        password: null,
+      }
+    })
+  } catch (error) {
+    console.log("Error deleting category.");
+    res.status(400).json({success: false, message: error.message})
+  }
+}
+
 export const addTask = async (req, res) => {
   const { taskName, taskDescription, taskCategory, taskDeadline } = req.body
 
