@@ -23,8 +23,9 @@ const DashboardPage = () => {
   const [dayAfter, setDayAfter] = useState(new Date())
   const [taskClicked, setTaskClicked] = useState(null)
   const [deleteClicked, setDeleteClicked] = useState(false)
-  const [ellipsisClicked, setEllipsisClicked] = useState(null)
-  const { user, logout, addCategory, addTask, editTask, deleteTask, completeTask, incompleteTask } = useAuthStore();
+  // const [ellipsisClicked, setEllipsisClicked] = useState(null)
+  const [editCategoriesClicked, setEditCategoriesClicked] = useState(false)
+  const { user, logout, addCategory, addTask, editTask, deleteTask, completeTask, incompleteTask } = useAuthStore()
 
   const colorVariants = {
     red: {bg: 'bg-red-category', border: 'border-red-category', text: 'text-red-category', ellipsisHover: 'hover:bg-red-2'},
@@ -151,6 +152,23 @@ const DashboardPage = () => {
     setTaskClicked(null)
   }
 
+  const handleCategoryFormClosed = () => {
+    setCategoryFormOpen(false)
+    setEditCategoriesClicked(false)
+    setTaskCategory('default')
+    setCategoryName('')
+    setCategoryColor('default')
+  }
+
+  const getEditCategoryNameColor = (taskValue) => {
+    setTaskCategory(taskValue)
+
+    // prevent same name of colors
+    let category = user.categories.find(cat => cat.name == taskValue)
+    setCategoryName(category.name)
+    setCategoryColor(category.color)
+  }
+
   const markTaskComplete = async (id) => {
     await completeTask(id)
   }
@@ -203,10 +221,14 @@ const DashboardPage = () => {
             <button onClick={getDateAfter} className='text-2xl text-gray-4 hover:text-gray-5'>{todaysDate.toLocaleDateString() == dayAfter.toLocaleDateString() ? 'Today' : dayAfter.toLocaleDateString(undefined, options)}</button>
           </div>
           <div className='flex items-center'>
-            <button onClick={() => setTaskFormOpen(true)} className='font-medium border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow-sm flex items-center transition hover:bg-light-purple-5 hover:border-light-purple-3'><FontAwesomeIcon className='mr-3' icon={faPlus} size='sm' />
-            Task</button>
-            <button onClick={() => setCategoryFormOpen(true)} className='font-medium border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow-sm flex items-center transition hover:bg-light-purple-5 hover:border-light-purple-3 ml-3'><FontAwesomeIcon className='mr-4' icon={faPlus} size='sm' />
-            Category</button>
+            <button onClick={() => setTaskFormOpen(true)} className='font-medium border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow-sm flex items-center transition hover:bg-light-purple-5 hover:border-light-purple-3'>
+              <FontAwesomeIcon className='mr-3' icon={faPlus} size='sm' />
+              Task
+            </button>
+            <button onClick={() => setCategoryFormOpen(true)} className='font-medium border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow-sm flex items-center transition hover:bg-light-purple-5 hover:border-light-purple-3 ml-3'>
+              <FontAwesomeIcon className='mr-4' icon={faPlus} size='sm' />
+              Category
+            </button>
             {
               taskFormOpen ? 
                 <div className='fixed top-0 left-0 h-screen w-screen flex justify-center items-center z-20'>
@@ -257,26 +279,56 @@ const DashboardPage = () => {
                 <div className='fixed top-0 left-0 h-screen w-screen flex justify-center items-center z-20'>
                   <div className='bg-white rounded-b-md rounded-t-sm overflow-clip w-1/3 shadow-xl shadow-light-purple-2'>
                     <div className='border-t-4 border-light-purple-1 bg-light-purple-2 py-4 px-4 text-light-purple-1 flex items-center justify-between'>
-                      <div>Add new category</div>
-                      <button onClick={() => setCategoryFormOpen(false)}><FontAwesomeIcon className='text-gray-4 transition hover:text-light-purple-1' icon={faXmark} size='lg' /></button>
+                      <div>{!editCategoriesClicked ? 'Add New Category' : 'Edit Categories'}</div>
+                      <button onClick={(e) => handleCategoryFormClosed()}><FontAwesomeIcon className='text-gray-4 transition hover:text-light-purple-1' icon={faXmark} size='lg' /></button>
                     </div>
+                    {
+                      !editCategoriesClicked ?
+                        <div className='px-4 mt-4'>
+                          <button onClick={() => setEditCategoriesClicked(true)} className='font-medium text-sm border-2 border-light-purple-5 text-dark-purple-2 py-2 px-5 rounded-full shadow-sm flex items-center transition hover:bg-light-purple-5 hover:border-light-purple-3'>
+                            Edit Categories
+                          </button>
+                        </div>
+                      : ''
+                    }
                     <form onSubmit={handleCategorySubmit} className='py-6 px-5 flex flex-col text-gray-5'>
-                      <label className='mb-2'>Name</label>
-                      <input onChange={(e) => setCategoryName(e.target.value)} value={categoryName} type="text" className='border-1 border-gray-3 rounded-md py-2 px-3 mb-4' />
-                      <label className='mb-2'>Color</label>
-                      <select onChange={(e) => setCategoryColor(e.target.value)} defaultValue={'default'} className={`text-${categoryColor}-category border-1 border-gray-3 rounded-md py-2 px-3 mb-8 font-semibold`}>
-                        <option value="default" disabled></option>
-                        <option value="red" className='font-semibold text-red-category'>Red</option>
-                        <option value="orange" className='font-semibold text-orange-category'>Orange</option>
-                        <option value="yellow" className='font-semibold text-yellow-category'>Yellow</option>
-                        <option value="green" className='font-semibold text-green-category'>Green</option>
-                        <option value="blue" className='font-semibold text-blue-category'>Blue</option>
-                        <option value="purple" className='font-semibold text-purple-category'>Purple</option>
-                        <option value="pink" className='font-semibold text-pink-category'>Pink</option>
-                      </select>
-                      <div className='flex justify-end font-medium'>
-                        <button className='bg-light-purple-1 text-white rounded-full px-5 py-2 w-1/3 shadow-md transition hover:bg-dark-purple-2' type='submit'>Save</button>
-                      </div>
+                      {
+                        editCategoriesClicked ? 
+                          <div>
+                            <label>Select Category</label>
+                            <select onChange={(e) => getEditCategoryNameColor(e.target.value)} defaultValue={'default'} value={taskCategory} className='border-1 border-gray-3 rounded-md py-2 px-3 mb-4 w-full mt-2'>
+                              <option value="default" disabled></option>
+                              {
+                                user.categories.map((category, index) => 
+                                  <option key={index}>{category.name}</option>
+                                )
+                              }
+                            </select>
+                          </div>
+                        : ''
+                      }
+                      {
+                        (editCategoriesClicked && taskCategory !== 'default') || (!editCategoriesClicked) ? 
+                          <div className='flex flex-col'>
+                            <label className='mb-2'>Name</label>
+                            <input onChange={(e) => setCategoryName(e.target.value)} value={categoryName} type="text" className='border-1 border-gray-3 rounded-md py-2 px-3 mb-4' />
+                            <label className='mb-2'>Color</label>
+                            <select onChange={(e) => setCategoryColor(e.target.value)} defaultValue={'default'} value={categoryColor} className={`text-${categoryColor}-category border-1 border-gray-3 rounded-md py-2 px-3 mb-8 font-semibold`}>
+                              <option value="default" disabled></option>
+                              <option value="red" className='font-semibold text-red-category'>Red</option>
+                              <option value="orange" className='font-semibold text-orange-category'>Orange</option>
+                              <option value="yellow" className='font-semibold text-yellow-category'>Yellow</option>
+                              <option value="green" className='font-semibold text-green-category'>Green</option>
+                              <option value="blue" className='font-semibold text-blue-category'>Blue</option>
+                              <option value="purple" className='font-semibold text-purple-category'>Purple</option>
+                              <option value="pink" className='font-semibold text-pink-category'>Pink</option>
+                            </select>
+                            <div className='flex justify-end font-medium'>
+                              <button className='bg-light-purple-1 text-white rounded-full px-5 py-2 w-1/3 shadow-md transition hover:bg-dark-purple-2' type='submit'>Save</button>
+                            </div>
+                          </div>
+                        : ''
+                      }
                     </form>
                   </div>
                 </div>
@@ -298,19 +350,25 @@ const DashboardPage = () => {
                   return <div key={index}>
                     <div className={`${index !== 0 ? 'hidden' : 'mb-3 font-medium'} ${colorVariants[categoryColor.color].bg} flex items-center justify-between px-7 py-5 rounded-sm shadow text-white relative`}>
                       <div className='uppercase'>{task.category}</div>     
-                      {
+                      {/* {
                         ellipsisClicked && (ellipsisClicked == task.category) ? 
-                          <div className='absolute right-0 top-14 bg-white text-gray-7 flex flex-col z-10 rounded shadow-md font-normal'>
-                            <button className='w-full text-left px-3 py-2 border-b-2 border-gray-3'>Edit Category</button>
-                            <button className='w-full text-left px-3 py-2'>Delete Category</button>
-                          </div>
+                          <OutsideClickHandler
+                            onOutsideClick={() => {
+                              setEllipsisClicked(null)
+                            }}>   
+
+                            <div className='absolute right-0 top-14 bg-white text-gray-7 flex flex-col z-10 rounded shadow-md font-normal'>
+                              <button onClick={() => setEditCategoryClicked(task.category)} className='w-full text-left px-3 py-2 border-b-2 border-gray-3 transition hover:bg-gray-3'>Edit Category</button>
+                              <button className='w-full text-left px-3 py-2 transition hover:bg-gray-3'>Delete Category</button>
+                            </div>
+                          </OutsideClickHandler>              
                         : ''
-                      } 
-                      <div>
+                      }  */}
+                      {/* <div>
                         <button onClick={() => setEllipsisClicked(task.category)} className={`py-1 px-2 rounded-full transition ${colorVariants[categoryColor.color].ellipsisHover}`}>
                           <FontAwesomeIcon icon={faEllipsis} size='lg' />
                         </button>     
-                      </div>
+                      </div> */}
                     </div>
                     <div onClick={() => {setTaskFormOpen(true); setTaskClicked(task)}} className={`${index > 0 ? 'mt-3' : ''} ${task.complete ? 'bg-green-1 transition hover:bg-green-3' : 'bg-white transition hover:bg-gray-3'} border-l-4 ${task.complete ? 'border-green-2' : colorVariants[categoryColor.color].border} drop-shadow-md p-5 rounded rounded-l-none flex items-center cursor-pointer`}>
                       {
