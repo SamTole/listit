@@ -61,6 +61,126 @@ export const useAuthStore = create((set) => ({
     } 
   },
 
+  addCategory: async (categoryName, categoryColor) => {
+    try {
+      const response = await axios.post(`${API_URL}/addCategory`, {
+        categoryName, categoryColor
+      });   
+
+      set({
+        user: response.data.user,
+        isAuthenticated: true,
+        isLoading: false,
+      }) 
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
+  editCategory: async (id, categoryName, categoryColor) => {
+    try {
+      const response = await axios.post(`${API_URL}/editCategory`, {
+        id, categoryName, categoryColor
+      })
+
+      set({
+        user: response.data.user,
+        isAuthenticated: true,
+        isLoading: false,
+      }) 
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
+  deleteCategory: async (id) => {
+    try {
+      const response = await axios.post(`${API_URL}/deleteCategory`, {id})
+
+      set({
+        user: response.data.user,
+        isAuthenticated: true,
+        isLoading: false,
+      }) 
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
+  addTask: async (taskName, taskDescription, taskCategory, taskDeadline) => {
+    try {
+      const response = await axios.post(`${API_URL}/addTask`, {
+        taskName, taskDescription, taskCategory, taskDeadline
+      });   
+
+      set({
+        user: response.data.user,
+        isAuthenticated: true,
+        isLoading: false,
+      }) 
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
+  editTask: async (id, taskName, taskDescription, taskCategory, taskDeadline) => {
+    try {
+      const response = await axios.post(`${API_URL}/editTask`, {
+        id, taskName, taskDescription, taskCategory, taskDeadline
+      })
+
+      set({
+        user: response.data.user,
+        isAuthenticated: true,
+        isLoading: false,
+      }) 
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
+  deleteTask: async (id) => {
+    try {
+      const response = await axios.post(`${API_URL}/deleteTask`, {id})
+
+      set({
+        user: response.data.user,
+        isAuthenticated: true,
+        isLoading: false,
+      }) 
+    } catch (error) {
+      console.log(error)  
+    }
+  },
+
+  completeTask: async (id) => {
+    try {
+      const response = await axios.post(`${API_URL}/completeTask`, {id})
+
+      set({
+        user: response.data.user,
+        isAuthenticated: true,
+        isLoading: false,
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
+  incompleteTask: async (id) => {
+    try {
+      const response = await axios.post(`${API_URL}/incompleteTask`, {id})
+
+      set({
+        user: response.data.user,
+        isAuthenticated: true,
+        isLoading: false,
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
   logout: async () => {
     set({ isLoading: true, error: null });
 
