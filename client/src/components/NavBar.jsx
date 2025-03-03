@@ -8,7 +8,7 @@ const NavBar = () => {
     <div className='grid grid-cols-3 items-center py-8 px-12 z-10'>
         <Logo />
         <div></div>
-        <div className='grid grid-cols-3 justify-items-end'>
+        <div className='grid grid-cols-3 justify-items-end font-medium'>
             <Link to={'/home'}>Home</Link>
             <Link to={''}>About</Link>
             <Link to={'/login'}>Login</Link>
