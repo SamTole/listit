@@ -22,6 +22,7 @@ export default {
     },
     colors: {
       'white': '#FFF',
+      'transparent': 'transparent',
       'light-purple-1': '#6C63FF',
       'light-purple-2': '#E1DFFF',
       'light-purple-3': '#827CF1',
