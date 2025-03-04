@@ -1,8 +1,23 @@
 import React from 'react'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
+
 const InputField = ({...props}) => {
+  const getIcon = () => {
+    if (props.name == 'email') {
+      return <FontAwesomeIcon icon={faEnvelope} />
+    }
+    else if (props.name == 'password') {
+      return <FontAwesomeIcon icon={faLock} />
+    }
+  }
+
   return (
-    <input {...props} className={`${props.classes} border-1 border-gray-2 rounded-full py-3 px-5 w-full focus:border-light-purple-1 focus:outline-none focus:ring-1 ring-light-purple-1`} />
+    <div className={`${props.classes} w-full border-1 border-gray-1 px-6 flex items-center rounded-full text-gray-4 shadow`}>
+      {getIcon()}
+      <input {...props} className={`ml-3 focus:outline-none text-black w-full py-4`} />
+    </div>
   )
 }
 
