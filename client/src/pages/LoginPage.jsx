@@ -42,7 +42,7 @@ const LoginPage = () => {
         <motion.div className='w-3/5'
           initial={{ opacity: 0, y: 30}}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, ease: 'easeOut', delay: 0.15}}
+          transition={{ duration: 0.45, ease: 'easeInOut', delay: 0.15}}
         >
           <div className='text-5xl font-medium mb-5'>Welcome Back!</div>
           <div className='text-lg text-gray-1 font-medium mb-10'>Please enter your credentials to sign in.</div>
@@ -57,7 +57,7 @@ const LoginPage = () => {
       <motion.div className='col-span-2 bg-light-purple-2 flex items-center justify-center'
         initial={{ opacity: 0, y: -40}}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.45, ease: 'easeOut', delay: 0.15}}
+        transition={{ duration: 0.45, ease: 'easeInOut', delay: 0.15}}
       >
 
       {/* <img src={LoginImage} alt="login-image.png" /> */}
