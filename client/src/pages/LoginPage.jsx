@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Lock, Loader } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -8,19 +8,13 @@ import FormBtn from '../components/FormBtn';
 import Logo from '../components/Logo';
 import { useAuthStore } from '../store/authStore';
 import LoginImage from '../assets/img/login-image.png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("")
   const { login, isLoading, error } = useAuthStore()
-
-  const svgVariants = {
-    initial: { rotate: 20 },
-    animate: {
-      rotate: 0,
-      transition: { duration: 1. },
-    }
-  }
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -47,20 +41,24 @@ const LoginPage = () => {
           <div className='text-5xl font-medium mb-5'>Welcome Back!</div>
           <div className='text-lg text-gray-1 font-medium mb-10'>Please enter your credentials to sign in.</div>
           <form onSubmit={handleLogin} className='flex flex-col items-center w-full mb-8'>
-            <InputField onChange={(e) => setEmail(e.target.value)} name='email' value={email} type='email' placeholder='Email' classes='mb-6 max-w-lg' />
-            <InputField onChange={(e) => setPassword(e.target.value)} name='password' value={password} type='password' placeholder='Password' classes='mb-10 max-w-lg' />
+            <div className={ `w-full bg-gray-8 px-6 flex items-center rounded-full text-gray-4 shadow mb-6 max-w-lg`}>
+              <FontAwesomeIcon icon={faEnvelope} />
+              <InputField onChange={(e) => setEmail(e.target.value)} name='email' value={email} type='email' placeholder='Email' />
+            </div>
+            <div className={`w-full bg-gray-8 px-6 flex items-center rounded-full text-gray-4 shadow mb-6 max-w-lg`}>
+              <FontAwesomeIcon icon={faLock} />
+              <InputField onChange={(e) => setPassword(e.target.value)} name='password' value={password} type='password' placeholder='Password' classes='mb-10 max-w-lg' />
+            </div>
             <FormBtn text='SIGN IN' />
           </form>
           <div className='text-gray-1'>Don't have an account? <Link to={'/signup'} className='text-light-purple-1 transition hover:text-dark-purple-2 font-semibold'>Sign up here</Link></div>
         </motion.div>
       </div>
       <motion.div className='col-span-2 bg-light-purple-2 flex items-center justify-center'
-        initial={{ opacity: 0, y: -40}}
+        initial={{ opacity: 0, y: -50}}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.45, ease: 'easeInOut', delay: 0.15}}
+        transition={{ duration: 0.45, ease: 'easeOut', delay: 0.15}}
       >
-
-      {/* <img src={LoginImage} alt="login-image.png" /> */}
       <motion.svg className='w-2/3' width="683" height="408" viewBox="0 0 683 408" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g clip-path="url(#clip0_64_4)">
         <motion.path d="M522.921 403.386C514.177 396.003 508.865 384.341 510.258 372.987C511.651 361.634 520.278 351.197 531.469 348.786C542.66 346.375 555.417 353.049 558.816 363.971C560.686 342.913 562.842 320.972 574.047 303.039C584.193 286.801 601.767 275.182 620.812 273.103C639.858 271.024 659.91 278.875 671.788 293.895C683.666 308.915 686.574 330.751 678.255 347.995C672.127 360.698 660.836 370.152 649.007 377.843C610.781 402.487 564.934 412.508 519.901 406.064L522.921 403.386Z" fill="#6C63FF"
