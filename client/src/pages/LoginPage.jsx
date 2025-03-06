@@ -41,17 +41,17 @@ const LoginPage = () => {
           <div className='text-5xl font-medium mb-5'>Welcome Back!</div>
           <div className='text-lg text-gray-1 font-medium mb-10'>Please enter your credentials to sign in.</div>
           <form onSubmit={handleLogin} className='flex flex-col items-center w-full mb-8'>
-            <div className={ `w-full bg-gray-8 px-6 flex items-center rounded-full text-gray-4 shadow mb-6 max-w-lg`}>
+            <motion.div className={ `w-full bg-gray-8 px-6 flex items-center rounded-full text-gray-4 shadow mb-6 max-w-lg`}>
               <FontAwesomeIcon icon={faEnvelope} />
               <InputField onChange={(e) => setEmail(e.target.value)} name='email' value={email} type='email' placeholder='Email' />
-            </div>
+            </motion.div>
             <div className={`w-full bg-gray-8 px-6 flex items-center rounded-full text-gray-4 shadow mb-6 max-w-lg`}>
               <FontAwesomeIcon icon={faLock} />
               <InputField onChange={(e) => setPassword(e.target.value)} name='password' value={password} type='password' placeholder='Password' classes='mb-10 max-w-lg' />
             </div>
             <FormBtn text='SIGN IN' />
           </form>
-          <div className='text-gray-1'>Don't have an account? <Link to={'/signup'} className='text-light-purple-1 transition hover:text-dark-purple-2 font-semibold'>Sign up here</Link></div>
+          <div className='text-gray-1'>Don't have an account? <Link to={'/signup'} className='text-light-purple-1 transition hover:text-dark-purple-2 font-semibold border-b-2 border-transparent hover:border-light-purple-1'>Sign up here</Link></div>
         </motion.div>
       </div>
       <motion.div className='col-span-2 bg-light-purple-2 flex items-center justify-center'
