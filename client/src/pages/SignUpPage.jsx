@@ -45,7 +45,6 @@ const SignUpPage = () => {
         transition={{ duration: 0.45, ease: 'easeOut', delay: 0.15}}
       >
         <RegisterImg />
-        {/* <img src={SignupImage} alt="signup-image.png" className='w-5/12' /> */}
       </motion.div>
       <div className='col-span-3 flex flex-col items-center justify-center text-center w-full md:pt-28 pb-20 pt-10 grow'>
         <motion.div className='lg:w-3/5 w-full lg:px-0 md:max-lg:px-20 px-10'
