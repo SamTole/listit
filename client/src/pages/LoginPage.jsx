@@ -14,7 +14,11 @@ import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("")
-  const { login, isLoading, error } = useAuthStore()
+  const { login, isLoading, error, resetErrorMsg } = useAuthStore()
+
+  useEffect(() => {
+    resetErrorMsg()
+  }, [])
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -50,6 +54,7 @@ const LoginPage = () => {
               <InputField onChange={(e) => setPassword(e.target.value)} name='password' value={password} type='password' placeholder='Password' classes='mb-10 max-w-lg' />
             </div>
             <FormBtn text='SIGN IN' />
+            {error && <p className='text-red-2 font-semibold mt-6'>{error}</p>}
           </form>
           <div className='text-gray-1'>Don't have an account? <Link to={'/signup'} className='text-light-purple-1 transition hover:text-dark-purple-2 font-semibold border-b-2 border-transparent hover:border-light-purple-1'>Sign up here</Link></div>
         </motion.div>
