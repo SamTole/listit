@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useAuthStore } from '../store/authStore'
-
+import { motion } from 'framer-motion'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleLeft, faAngleRight, faPlus, faXmark, faCheckCircle, faEllipsis } from '@fortawesome/free-solid-svg-icons'
 import Menu from '../components/Menu';
@@ -291,7 +291,11 @@ const DashboardPage = () => {
             }
             {
               categoryFormOpen ? 
-                <div className='fixed top-0 left-0 h-screen w-screen flex justify-center items-center z-20'>
+                <motion.div className='fixed top-0 left-0 h-screen w-screen flex justify-center items-center z-20'
+                  initial={{ opacity: 0, y: -30}}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35, ease: 'easeInOut', delay: 0.05}}
+                >
                   <div className='bg-white rounded-b-md rounded-t-sm overflow-clip w-1/3 shadow-xl shadow-light-purple-2'>
                     <div className='border-t-4 border-light-purple-1 bg-light-purple-2 py-4 px-4 text-light-purple-1 flex items-center justify-between'>
                       <div>{!editCategoriesClicked ? 'Add New Category' : 'Edit Categories'}</div>
@@ -300,7 +304,7 @@ const DashboardPage = () => {
                     {
                       !editCategoriesClicked ?
                         <div className='px-4 mt-4'>
-                          <button onClick={() => setEditCategoriesClicked(true)} className='font-medium text-sm border-2 border-light-purple-5 text-dark-purple-2 py-2 px-5 rounded-full shadow-sm flex items-center transition hover:bg-light-purple-5 hover:border-light-purple-3'>
+                          <button onClick={() => setEditCategoriesClicked(true)} className='font-medium text-sm border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow flex items-center transition hover:bg-light-purple-5 hover:border-light-purple-3'>
                             Edit Categories
                           </button>
                         </div>
@@ -325,18 +329,18 @@ const DashboardPage = () => {
                       {
                         (editCategoriesClicked && taskCategory !== 'default') || (!editCategoriesClicked) ? 
                           <div className='flex flex-col'>
-                            <label className='mb-2'>Name</label>
-                            <input onChange={(e) => setCategoryName(e.target.value)} value={categoryName} type="text" className='border-1 border-gray-3 rounded-md py-2 px-3 mb-4' />
-                            <label className='mb-2'>Color</label>
-                            <select onChange={(e) => setCategoryColor(e.target.value)} defaultValue={'default'} value={categoryColor} className={`text-${categoryColor}-category border-1 border-gray-3 rounded-md py-2 px-3 mb-8 font-semibold`}>
-                              <option value="default" disabled></option>
-                              <option value="red" className='font-semibold text-red-category'>Red</option>
-                              <option value="orange" className='font-semibold text-orange-category'>Orange</option>
-                              <option value="yellow" className='font-semibold text-yellow-category'>Yellow</option>
-                              <option value="green" className='font-semibold text-green-category'>Green</option>
-                              <option value="blue" className='font-semibold text-blue-category'>Blue</option>
-                              <option value="purple" className='font-semibold text-purple-category'>Purple</option>
-                              <option value="pink" className='font-semibold text-pink-category'>Pink</option>
+                            {/* <label className='mb-2 ml-1'>Name</label> */}
+                            <input onChange={(e) => setCategoryName(e.target.value)} value={categoryName} type="text" placeholder='Name' className='bg-gray-8 shadow-sm rounded-full py-3 px-4 mb-6 focus:outline-light-purple-5 focus:ring-1' />
+                            {/* <label className='mb-2 ml-1'>Color</label> */}
+                            <select onChange={(e) => setCategoryColor(e.target.value)} defaultValue={'default'} value={categoryColor} className={`bg-gray-8 shadow-sm rounded-full py-3 px-4 mb-6 focus:outline-light-purple-5 focus:ring-1 focus:ring-light-purple-5 border-r-10 border-transparent ${categoryColor !== 'default' ? `${colorVariants[categoryColor].text} font-medium` : 'text-gray-2'}`}>
+                              <option value="default" className='bg-white' disabled>Color</option>
+                              <option value="red" className='bg-white font-medium text-red-category'>⬤ Red</option>
+                              <option value="orange" className='bg-white font-medium text-orange-category'>⬤ Orange</option>
+                              <option value="yellow" className='bg-white font-medium text-yellow-category'>⬤ Yellow</option>
+                              <option value="green" className='bg-white font-medium text-green-category'>⬤ Green</option>
+                              <option value="blue" className='bg-white font-medium text-blue-category'>⬤ Blue</option>
+                              <option value="purple" className='bg-white font-medium text-purple-category'>⬤ Purple</option>
+                              <option value="pink" className='bg-white font-medium text-pink-category'>⬤ Pink</option>
                             </select>
                             <div className='flex justify-end font-medium'>
                               {
@@ -344,14 +348,14 @@ const DashboardPage = () => {
                                   <button onClick={() => setDeleteCategoryClicked(true)} className='bg-red-1 text-white rounded-full px-5 py-2 w-1/3 shadow-md mr-2 transition hover:bg-red-2' type='submit'>Delete</button>
                                 : ''
                               }
-                              <button className='bg-light-purple-1 text-white rounded-full px-5 py-2 w-1/3 shadow-md transition hover:bg-dark-purple-2' type='submit'>Save</button>
+                              <button className='bg-light-purple-1 text-white rounded-full px-7 py-3 w-1/3 shadow-md transition hover:bg-dark-purple-2' type='submit'>Save</button>
                             </div>
                           </div>
                         : ''
                       }
                     </form>
                   </div>
-                </div>
+                </motion.div>
               :
                 <></>
             }

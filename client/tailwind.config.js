@@ -19,6 +19,7 @@ export default {
       '2': '2px',
       '3': '3px',
       '4': '4px',
+      '10': '10px'
     },
     colors: {
       'white': '#FFF',
@@ -56,7 +57,7 @@ export default {
       'red-check': '#F2E3E3',
       'orange-category': '#F9B555',
       'orange-check': '#FBEBD5',
-      'yellow-category': '#FBD147',
+      'yellow-category': '#FFCA1D',
       'green-category': '#63B962',
       'green-check-hover': '#73D9A3',
       'blue-category': '#5797F0',
