@@ -32,7 +32,7 @@ const LoginPage = () => {
       <div className='md:absolute md:flex-none col-span-5 flex justify-start items-start w-full top-0 left-0 py-6 px-8'>
         <Logo />
       </div>
-      <div className='col-span-3 flex flex-col items-center justify-center text-center w-full md:max-lg:pt-28 md:max-lg:pb-20'>
+      <div className='col-span-3 flex flex-col items-center justify-center text-center w-full md:max-lg:pt-28 md:max-lg:pb-20 pb-20 pt-10 lg:pb-0 lg:pt-0 grow'>
         <motion.div className='lg:w-3/5 w-full lg:px-0 md:max-lg:px-20 px-10'
           initial={{ opacity: 0, y: 30}}
           animate={{ opacity: 1, y: 0 }}
@@ -54,7 +54,7 @@ const LoginPage = () => {
           <div className='text-gray-1'>Don't have an account? <Link to={'/signup'} className='text-light-purple-1 transition hover:text-dark-purple-2 font-semibold border-b-2 border-transparent hover:border-light-purple-1'>Sign up here</Link></div>
         </motion.div>
       </div>
-      <motion.div className='col-span-2 bg-light-purple-2 md:flex hidden items-center justify-center'
+      <motion.div className='col-span-2 bg-light-purple-2 flex items-center justify-center'
         initial={{ opacity: 0, y: -50}}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, ease: 'easeOut', delay: 0.15}}
