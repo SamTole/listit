@@ -48,22 +48,14 @@ export const useAuthStore = create((set) => ({
     })
 
     try {
-      if (!email || !password) {
-        set({
-          error: 'Please input your credentials.',
-          isLoading: false,
-        })
-      }
-      else {
-        const response = await axios.post(`${API_URL}/login`, {
-          email, password
-        });
-        set({
-          user: response.data.user,
-          isAuthenticated: true,
-          isLoading: false,
-        })
-      }
+      const response = await axios.post(`${API_URL}/login`, {
+        email, password
+      });
+      set({
+        user: response.data.user,
+        isAuthenticated: true,
+        isLoading: false,
+      })
     } catch (error) {
       set({
         error: error.response.data.message || 'Error logging in.',

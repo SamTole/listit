@@ -16,9 +16,9 @@ const PasswordCriteria = ({password}) => {
         criteria.map((item, index) => (
           <div key={item.label} className='flex items-center text-xs'>
             {item.met ? (
-              <Check className='size-4 text-green-1 mr-2' />
+              <Check className='size-5 text-green-2 mr-2' />
             ) : (
-              <X className='size-4 text-gray-1 mr-2' />
+              <X className='size-5 text-gray-1 mr-2' />
             )}
             <span className={item.met ? 'text-green-500' : 'text-gray-400'}>{item.label}</span>
           </div>
@@ -57,12 +57,12 @@ const PasswordStrengthMeter = ({password}) => {
       return 'bg-red-1';
     }
     if (strength === 2) {
-      return 'bg-orange-1';
+      return 'bg-orange-category';
     }
     if (strength === 3) {
-      return 'bg-yellow-1';
+      return 'bg-yellow-category';
     }
-    return 'bg-green-1';
+    return 'bg-green-category';
   }
 
   const getStrengthText = (strength) => {

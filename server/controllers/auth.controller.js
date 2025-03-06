@@ -50,6 +50,10 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
+    if (!email || !password) {
+      throw new Error("Please input your credentials.");
+    }
+
     const user = await User.findOne({email});
 
     if (!user) {
