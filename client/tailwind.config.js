@@ -14,6 +14,9 @@ export default {
         '42rem': '42rem',
         '80rem': '80rem',
       },
+      maxWidth: {
+        'max-w-screen-3xl': '1800px',
+      }
     },
     borderWidth: {
       '1': '1px',

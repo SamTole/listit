@@ -173,6 +173,10 @@ export const addTask = async (req, res) => {
   const { taskName, taskDescription, taskCategory, taskDeadline } = req.body
 
   try {
+    if (!taskName || taskCategory == 'default' || !taskDeadline ) {
+      throw new Error('Name, category, and deadline cannot be blank.')
+    }
+
     await User.findByIdAndUpdate(
       req.userId,
       {$push: {tasks: {id: new ObjectId().toString(), name: taskName, description: taskDescription, category: taskCategory, deadline: taskDeadline, complete: false}}}
@@ -197,6 +201,10 @@ export const editTask = async (req, res) => {
   const { id, taskName, taskDescription, taskCategory, taskDeadline } = req.body
 
   try {
+    if (!taskName || !taskDeadline) {
+      throw new Error('Name, category, and deadline cannot be blank.')
+    }
+
     await User.findByIdAndUpdate(
       req.userId,
       {$set: {'tasks.$[task].name': taskName, 'tasks.$[task].description': taskDescription, 'tasks.$[task].category': taskCategory, 'tasks.$[task].deadline': taskDeadline}},

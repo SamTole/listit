@@ -163,6 +163,13 @@ const DashboardPage = () => {
       else {
         await deleteTask(taskClicked.id)
         setDeleteClicked(false)
+        setTaskCategory('default')
+        setTaskName('')
+        setTaskDescription('')
+        setTaskDeadline('')
+        setTaskFormOpen(false)
+        setTaskClicked(null)
+        resetMsg()
       }
     }
     else {
@@ -181,6 +188,8 @@ const DashboardPage = () => {
     setTaskCategory('default')
     setTaskDeadline('')
     setTaskClicked(null)
+    resetErrorMsg()
+    resetMsg()
   }
 
   const handleCategoryFormClosed = () => {
@@ -263,45 +272,74 @@ const DashboardPage = () => {
             </button>
             {
               taskFormOpen ? 
-                <div className='fixed top-0 left-0 h-screen w-screen flex justify-center items-center z-20'>
-                  <div className='bg-white rounded-b-md rounded-t-sm overflow-clip w-1/3 shadow-xl shadow-light-purple-2'>
-                    <div className='border-t-4 border-light-purple-1 bg-light-purple-2 py-4 px-4 text-light-purple-1 flex items-center justify-between'>
-                      <div>{taskClicked ? 'Edit Task' : 'Add New Task'}</div>
-                      <button onClick={handleTaskFormClosed}><FontAwesomeIcon className='text-gray-4 transition hover:text-light-purple-1' icon={faXmark} size='lg' /></button>
+                <div className='fixed top-0 left-0 z-20 w-screen h-screen flex items-center justify-center'>
+                  <motion.div className='w-full max-w-screen-3xl flex justify-center items-center'
+                    initial={{ opacity: 0, y: -30}}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, ease: 'easeInOut', delay: 0.05}}
+                  >
+                    <div className='bg-white rounded-b-md rounded-t-sm overflow-clip w-1/3 shadow-xl shadow-light-purple-2'>
+                      <div className='border-t-4 border-light-purple-1 bg-light-purple-2 py-4 px-4 text-light-purple-1 flex items-center justify-between'>
+                        <div>{taskClicked ? 'Edit Task' : 'Add New Task'}</div>
+                        <button onClick={handleTaskFormClosed}><FontAwesomeIcon className='text-gray-4 transition hover:text-light-purple-1' icon={faXmark} size='lg' /></button>
+                      </div>
+                      <form onSubmit={handleTaskSubmit} className='py-6 px-5 flex flex-col text-gray-5'>
+                        <input onChange={(e) => setTaskName(e.target.value)} value={taskName} type="text" placeholder='Task Name' className='bg-gray-8 shadow-sm rounded-full py-3 px-4 mb-6 focus:outline-light-purple-5 focus:ring-1' />
+                        {/* Ensure this could be scrolled on screens with less height */}
+                        <textarea onChange={(e) => setTaskDescription(e.target.value)} value={taskDescription} placeholder='Task Description' className='bg-gray-8 shadow-sm rounded-lg py-3 px-4 mb-6 focus:outline-light-purple-5 focus:ring-1'></textarea>
+                        <div className='flex items-center mb-6'>
+                          <div className='flex flex-col w-1/2 mr-2'>
+                            <select onChange={(e) => setTaskCategory(e.target.value)} defaultValue={'default'} value={taskCategory} className='bg-gray-8 shadow-sm rounded-full py-3 px-4 focus:outline-light-purple-5 focus:ring-1 focus:ring-light-purple-5 border-r-10 border-transparent'>
+                            `<option value="default" className='bg-white' disabled>Select Category</option>
+                              {
+                                user.categories.map((category, index) => 
+                                  <option value={category.id} key={index} className='bg-white'>{category.name}</option>
+                                )
+                              }
+                            </select>
+                          </div>
+                          <div className='flex flex-col w-1/2 ml-2'>
+                            <input onChange={(e) => setTaskDeadline(e.target.value)} value={taskDeadline} type="datetime-local" className='bg-gray-8 shadow-sm rounded-full py-3 px-4 focus:outline-light-purple-5 focus:ring-1 focus:ring-light-purple-5 border-r-10 border-transparent' />
+                          </div>
+                        </div>
+                        {error ? <p className='text-red-2 font-medium ml-2 mb-4'>{error}</p> : !error && message ? <p className='text-green-2 font-medium ml-2 mb-4'>{message}</p> : ''}
+                        <div className='flex justify-end font-medium'>
+                          {
+                            taskClicked ?
+                              <motion.button onClick={() => setDeleteClicked(true)} className='bg-red-1 text-white rounded-full px-5 py-2 w-1/3 shadow-md mr-3' type='submit'
+                                whileHover={{
+                                  scale: 1.1,
+                                  background: '#C94646',
+                                  transition: {
+                                    duration: 0.2,
+                                    ease: 'easeInOut' 
+                                  }
+                                }}
+                                whileTap='tap'
+                                variants={btnVariants}
+                              >
+                                Delete
+                              </motion.button>
+                            : ''
+                          }
+                          <motion.button className='bg-light-purple-1 text-white rounded-full px-7 py-3 w-1/3 shadow-md' type='submit'
+                            whileHover={{
+                              scale: 1.1,
+                              background: '#534CC7',
+                              transition: {
+                                duration: 0.2,
+                                ease: 'easeInOut' 
+                              }
+                            }}
+                            whileTap='tap'
+                            variants={btnVariants}
+                          >
+                            Save
+                          </motion.button>
+                        </div>
+                      </form>
                     </div>
-                    <form onSubmit={handleTaskSubmit} className='py-6 px-5 flex flex-col text-gray-5'>
-                      <label className='mb-2'>Title</label>
-                      <input onChange={(e) => setTaskName(e.target.value)} value={taskName} type="text" className='border-1 border-gray-3 rounded-md py-2 px-3 mb-4' />
-                      <label className='mb-2'>Description</label>
-                      {/* Ensure this could be scrolled on screens with less height */}
-                      <textarea onChange={(e) => setTaskDescription(e.target.value)} value={taskDescription} className='border-1 border-gray-3 rounded-md py-2 px-3 mb-4'></textarea>
-                      <div className='flex items-center mb-8'>
-                        <div className='flex flex-col w-1/2 mr-2'>
-                          <label className='mb-2'>Category</label>
-                          <select onChange={(e) => setTaskCategory(e.target.value)} defaultValue={'default'} value={taskCategory} className='border-1 border-gray-3 rounded-md p-3'>
-                          `<option value="default" disabled></option>
-                            {
-                              user.categories.map((category, index) => 
-                                <option value={category.id} key={index}>{category.name}</option>
-                              )
-                            }
-                          </select>
-                        </div>
-                        <div className='flex flex-col w-1/2 ml-2'>
-                          <label className='mb-2'>Due Date & Time</label>
-                          <input onChange={(e) => setTaskDeadline(e.target.value)} value={taskDeadline} type="datetime-local" className='border-1 border-gray-3 rounded-md py-2 px-3' />
-                        </div>
-                      </div>
-                      <div className='flex justify-end font-medium'>
-                        {
-                          taskClicked ?
-                            <button onClick={() => setDeleteClicked(true)} className='bg-red-1 text-white rounded-full px-5 py-2 w-1/3 shadow-md mr-2 transition hover:bg-red-2' type='submit'>Delete</button>
-                          : ''
-                        }
-                        <button className='bg-light-purple-1 text-white rounded-full px-5 py-2 w-1/3 shadow-md transition hover:bg-dark-purple-2' type='submit'>Save</button>
-                      </div>
-                    </form>
-                  </div>
+                  </motion.div>
                 </div>
               :
                 <></>

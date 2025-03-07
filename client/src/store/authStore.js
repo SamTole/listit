@@ -142,11 +142,17 @@ export const useAuthStore = create((set) => ({
 
       set({
         user: response.data.user,
+        message: response.data.message,
         isAuthenticated: true,
         isLoading: false,
+        error: null,
       }) 
     } catch (error) {
-      console.log(error)
+      set({
+        error: error.response.data.message || 'Error adding task.',
+        isLoading: false,
+      })
+      throw error
     }
   },
 
@@ -158,11 +164,17 @@ export const useAuthStore = create((set) => ({
 
       set({
         user: response.data.user,
+        message: response.data.message,
         isAuthenticated: true,
         isLoading: false,
+        error: null,
       }) 
     } catch (error) {
-      console.log(error)
+      set({
+        error: error.response.data.message || 'Error editing task.',
+        isLoading: false,
+      })
+      throw error
     }
   },
 
@@ -172,11 +184,17 @@ export const useAuthStore = create((set) => ({
 
       set({
         user: response.data.user,
+        message: response.data.message,
         isAuthenticated: true,
         isLoading: false,
+        error: null,
       }) 
     } catch (error) {
-      console.log(error)  
+      set({
+        error: error.response.data.message || 'Error deleting task.',
+        isLoading: false,
+      })
+      throw error
     }
   },
 

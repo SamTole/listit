@@ -53,6 +53,6 @@ input::placeholder {
     color: #484848;
 }
 
-/* textarea {
+textarea {
     resize: none;
-} */
+}
