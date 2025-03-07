@@ -459,7 +459,7 @@ const DashboardPage = () => {
       </div>
       <div className='w-full flex flex-col grow min-h-0'>
         <div className='flex flex-col grow w-full overflow-x-auto'>
-          <div className='tasks-container w-full px-16'>
+          <div className='tasks-container w-full h-full px-16'>
             {
               tasks.map((taskCategory, index) => {
                 return <div key={index} className={`${!taskCategory.length ? 'hidden' : ''} min-h-0 pr-3 overflow-y-auto relative`}>
@@ -468,7 +468,7 @@ const DashboardPage = () => {
                   
                   if (categoryColor) {
                     return <div key={index}>
-                      <div className={`${index !== 0 ? 'hidden' : 'mb-3 font-medium'} ${colorVariants[categoryColor.color].bg} flex items-center justify-between px-7 py-5 rounded-sm shadow text-white relative`}>
+                      <div className={`${index !== 0 ? 'hidden' : 'mb-3 font-medium'} ${colorVariants[categoryColor.color].bg} flex items-center justify-between px-7 py-5 rounded shadow text-white relative`}>
                         <div className='uppercase'>{categoryColor.name}</div>     
                         {/* {
                           ellipsisClicked && (ellipsisClicked == task.category) ? 
@@ -490,7 +490,7 @@ const DashboardPage = () => {
                           </button>     
                         </div> */}
                       </div>
-                      <div onClick={() => {setTaskFormOpen(true); setTaskClicked(task)}} className={`${index > 0 ? 'mt-3' : ''} ${task.complete ? 'bg-green-1 transition hover:bg-green-3' : 'bg-white transition hover:bg-gray-3'} border-l-4 ${task.complete ? 'border-green-2' : colorVariants[categoryColor.color].border} drop-shadow-md p-5 rounded rounded-l-none flex items-center cursor-pointer`}>
+                      <div onClick={() => {setTaskFormOpen(true); setTaskClicked(task)}} className={`${index > 0 ? 'mt-3' : ''} ${task.complete ? 'bg-green-1 transition hover:bg-green-3' : 'bg-white transition hover:bg-gray-3'} border-l-4 ${task.complete ? 'border-green-2' : colorVariants[categoryColor.color].border} drop-shadow-md p-5 rounded-md rounded-l-none flex items-center cursor-pointer`}>
                         {
                           task.complete ?
                             <button onClick={(e) => {markTaskIncomplete(task.id); e.stopPropagation()}}>
