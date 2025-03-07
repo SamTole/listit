@@ -247,10 +247,12 @@ const DashboardPage = () => {
   }
 
   return (
-    <div className={`bg-light-purple-2 h-screen flex flex-col`}>
+    <div className={`bg-light-purple-2 h-screen flex flex-col py-1 px-2 relative`}>
       {taskFormOpen || categoryFormOpen ? <div className='fixed h-screen w-screen bg-white opacity-60 z-10'></div> : <></>}
-      <Menu />
-      <div className='flex items-center justify-between px-16 py-8'>
+      <div className='absolute top-0 left-0 w-full'>
+        <Menu />
+      </div>
+      <div className='flex items-center justify-between px-16 py-8 mt-16'>
         {/* <div className='flex'> */}
           <div className='flex items-center'>
             <button onClick={getDateBefore} className='text-2xl text-gray-4 transition hover:text-gray-5'>{todaysDate.toLocaleDateString() == dayBefore.toLocaleDateString() ? 'Today' : dayBefore.toLocaleDateString(undefined, options)}</button>
@@ -262,14 +264,36 @@ const DashboardPage = () => {
             <button onClick={getDateAfter} className='text-2xl text-gray-4 hover:text-gray-5'>{todaysDate.toLocaleDateString() == dayAfter.toLocaleDateString() ? 'Today' : dayAfter.toLocaleDateString(undefined, options)}</button>
           </div>
           <div className='flex items-center'>
-            <button onClick={() => setTaskFormOpen(true)} className='font-medium border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow-sm flex items-center transition hover:bg-light-purple-5 hover:border-light-purple-3'>
+            <motion.button onClick={() => setTaskFormOpen(true)} className='font-medium border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow-sm flex items-center'
+              whileHover={{
+                scale: 1.1,
+                border: 'solid 1px #827CF1',
+                transition: {
+                  duration: 0.2,
+                  ease: 'easeInOut' 
+                }
+              }}
+              whileTap='tap'
+              variants={btnVariants}    
+            >
               <FontAwesomeIcon className='mr-3' icon={faPlus} size='sm' />
               Task
-            </button>
-            <button onClick={() => setCategoryFormOpen(true)} className='font-medium border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow-sm flex items-center transition hover:bg-light-purple-5 hover:border-light-purple-3 ml-3'>
+            </motion.button>
+            <motion.button onClick={() => setCategoryFormOpen(true)} className='font-medium border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow-sm flex items-center ml-3'
+              whileHover={{
+                scale: 1.1,
+                border: 'solid 1px #827CF1',
+                transition: {
+                  duration: 0.2,
+                  ease: 'easeInOut' 
+                }
+              }}
+              whileTap='tap'
+              variants={btnVariants}      
+            >
               <FontAwesomeIcon className='mr-4' icon={faPlus} size='sm' />
               Category
-            </button>
+            </motion.button>
             {
               taskFormOpen ? 
                 <div className='fixed top-0 left-0 z-20 w-screen h-screen flex items-center justify-center'>
@@ -363,7 +387,6 @@ const DashboardPage = () => {
                             <motion.button onClick={() => {setEditCategoriesClicked(true); resetErrorMsg(); resetMsg()}} className='font-medium text-sm border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow flex items-center'
                               whileHover={{
                                 scale: 1.1,
-                                background: '#BDB9FF',
                                 border: 'solid 1px #827CF1',
                                 transition: {
                                   duration: 0.2,
@@ -459,10 +482,15 @@ const DashboardPage = () => {
       </div>
       <div className='w-full flex flex-col grow min-h-0'>
         <div className='flex flex-col grow w-full overflow-x-auto'>
-          <div className='tasks-container w-full h-full px-16'>
+          <motion.div className='tasks-container w-full h-full px-16'
+            initial={{ opacity: 0, y: -30}}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, ease: 'easeInOut', delay: 0.1}}
+          >
             {
               tasks.map((taskCategory, index) => {
-                return <div key={index} className={`${!taskCategory.length ? 'hidden' : ''} min-h-0 pr-3 overflow-y-auto relative`}>
+                return <motion.div key={index} className={`${!taskCategory.length ? 'hidden' : ''} min-h-0 pr-3 overflow-y-auto relative`}
+                >
                   {taskCategory.map((task, index) => {
                   let categoryColor = user.categories.find((taskCat) => taskCat.id == task.category)
                   
@@ -509,13 +537,13 @@ const DashboardPage = () => {
                       </div>
                     </div>
                   }
-                })}</div>
+                })}</motion.div>
               })
             }
 
 
 
-          </div>
+          </motion.div>
         </div>
 
       </div>

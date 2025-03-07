@@ -64,7 +64,7 @@ textarea {
 /* Track */
 ::-webkit-scrollbar-track {
     background: #F9F9F9;
-    border-radius: 10px;
+    border-radius: 20px;
 }
 
 /* Handle */
