@@ -49,6 +49,10 @@ select {
     background-position-y: 12px;
 }
 
+input::placeholder {
+    color: #484848;
+}
+
 /* textarea {
     resize: none;
 } */

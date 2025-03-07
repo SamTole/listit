@@ -10,11 +10,16 @@ export const useAuthStore = create((set) => ({
   user: null,
   isAuthenticated: false,
   error: null,
+  message: null,
   isLoading: false,
   isCheckingAuth: true,
 
   resetErrorMsg: () => {
     set({ error: null })
+  },
+
+  resetMsg: () => {
+    set({ message: null })
   },
 
   signup: async (email, password, name) => {
@@ -73,8 +78,10 @@ export const useAuthStore = create((set) => ({
 
       set({
         user: response.data.user,
+        message: response.data.message,
         isAuthenticated: true,
         isLoading: false,
+        error: null,
       }) 
     } catch (error) {
       set({
@@ -93,11 +100,17 @@ export const useAuthStore = create((set) => ({
 
       set({
         user: response.data.user,
+        message: response.data.message,
         isAuthenticated: true,
         isLoading: false,
+        error: null,
       }) 
     } catch (error) {
-      console.log(error)
+      set({
+        error: error.response.data.message || 'Error editing category.',
+        isLoading: false,
+      })
+      throw error
     }
   },
 
@@ -107,11 +120,17 @@ export const useAuthStore = create((set) => ({
 
       set({
         user: response.data.user,
+        message: response.data.message,
         isAuthenticated: true,
         isLoading: false,
+        error: null,
       }) 
     } catch (error) {
-      console.log(error)
+      set({
+        error: error.response.data.message || 'Error deleting category.',
+        isLoading: false,
+      })
+      throw error
     }
   },
 

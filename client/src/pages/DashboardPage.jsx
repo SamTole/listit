@@ -26,7 +26,7 @@ const DashboardPage = () => {
   const [deleteCategoryClicked, setDeleteCategoryClicked] = useState(false)
   // const [ellipsisClicked, setEllipsisClicked] = useState(null)
   const [editCategoriesClicked, setEditCategoriesClicked] = useState(false)
-  const { user, logout, error, resetErrorMsg, addCategory, editCategory, deleteCategory, addTask, editTask, deleteTask, completeTask, incompleteTask } = useAuthStore()
+  const { user, logout, error, message, resetErrorMsg, resetMsg, addCategory, editCategory, deleteCategory, addTask, editTask, deleteTask, completeTask, incompleteTask } = useAuthStore()
 
   const btnVariants = {
     tap: {
@@ -60,6 +60,7 @@ const DashboardPage = () => {
     setDayAfter(new Date(dayAfter))
 
     resetErrorMsg()
+    resetMsg()
   }, [])
 
   useEffect(() => {
@@ -143,6 +144,8 @@ const DashboardPage = () => {
         setTaskCategory('default')
         setCategoryName('')
         setCategoryColor('default')
+        resetErrorMsg()
+        resetMsg()
       }
     }
     else {
@@ -187,6 +190,7 @@ const DashboardPage = () => {
     setCategoryName('')
     setCategoryColor('default')
     resetErrorMsg()
+    resetMsg()
   }
 
   const getEditCategoryNameColor = (taskValue) => {
@@ -318,7 +322,7 @@ const DashboardPage = () => {
                       {
                         !editCategoriesClicked ?
                           <div className='px-4 mt-4'>
-                            <motion.button onClick={() => setEditCategoriesClicked(true)} className='font-medium text-sm border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow flex items-center'
+                            <motion.button onClick={() => {setEditCategoriesClicked(true); resetErrorMsg(); resetMsg()}} className='font-medium text-sm border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow flex items-center'
                               whileHover={{
                                 scale: 1.1,
                                 background: '#BDB9FF',
@@ -339,13 +343,12 @@ const DashboardPage = () => {
                       <form onSubmit={handleCategorySubmit} className='py-6 px-5 flex flex-col text-gray-5'>
                         {
                           editCategoriesClicked ? 
-                            <div>
-                              <label>Select Category</label>
-                              <select onChange={(e) => getEditCategoryNameColor(e.target.value)} defaultValue={'default'} value={taskCategory} className='border-1 border-gray-3 rounded-md py-2 px-3 mb-4 w-full mt-2'>
-                                <option value="default" disabled></option>
+                            <div className='flex flex-col'>
+                              <select onChange={(e) => getEditCategoryNameColor(e.target.value)} defaultValue={'default'} value={taskCategory} className={`${taskCategory == 'default' ? '' : 'mb-6'} bg-gray-8 shadow-sm rounded-full py-3 px-4 focus:outline-light-purple-5 focus:ring-1 focus:ring-light-purple-5 border-r-10 border-transparent`}>
+                                <option value="default" className='bg-white' disabled>Select Category</option>
                                 {
                                   user.categories.map((category, index) => 
-                                    <option value={category.id} key={index}>{category.name}</option>
+                                    <option value={category.id} key={index} className='bg-white'>{category.name}</option>
                                   )
                                 }
                               </select>
@@ -356,10 +359,10 @@ const DashboardPage = () => {
                           (editCategoriesClicked && taskCategory !== 'default') || (!editCategoriesClicked) ? 
                             <div className='flex flex-col'>
                               {/* <label className='mb-2 ml-1'>Name</label> */}
-                              <input onChange={(e) => setCategoryName(e.target.value)} value={categoryName} type="text" placeholder='Name' className='bg-gray-8 shadow-sm rounded-full py-3 px-4 mb-6 focus:outline-light-purple-5 focus:ring-1' />
+                              <input onChange={(e) => setCategoryName(e.target.value)} value={categoryName} type="text" placeholder='Category Name' className='bg-gray-8 shadow-sm rounded-full py-3 px-4 mb-6 focus:outline-light-purple-5 focus:ring-1' />
                               {/* <label className='mb-2 ml-1'>Color</label> */}
-                              <select onChange={(e) => setCategoryColor(e.target.value)} defaultValue={'default'} value={categoryColor} className={`bg-gray-8 shadow-sm rounded-full py-3 px-4 mb-6 focus:outline-light-purple-5 focus:ring-1 focus:ring-light-purple-5 border-r-10 border-transparent ${categoryColor !== 'default' ? `${colorVariants[categoryColor].text} font-medium` : 'text-gray-2'}`}>
-                                <option value="default" className='bg-white' disabled>Color</option>
+                              <select onChange={(e) => setCategoryColor(e.target.value)} defaultValue={'default'} value={categoryColor} className={`bg-gray-8 shadow-sm rounded-full py-3 px-4 mb-6 focus:outline-light-purple-5 focus:ring-1 focus:ring-light-purple-5 border-r-10 border-transparent ${categoryColor !== 'default' ? `${colorVariants[categoryColor].text} font-medium` : ''}`}>
+                                <option value="default" className='bg-white' disabled>Select Color</option>
                                 <option value="red" className='bg-white font-medium text-red-category'>Red</option>
                                 <option value="orange" className='bg-white font-medium text-orange-category'>Orange</option>
                                 <option value="yellow" className='bg-white font-medium text-yellow-category'>Yellow</option>
@@ -368,11 +371,24 @@ const DashboardPage = () => {
                                 <option value="purple" className='bg-white font-medium text-purple-category'>Purple</option>
                                 <option value="pink" className='bg-white font-medium text-pink-category'>Pink</option>
                               </select>
-                              {error && <p className='text-red-2 font-medium ml-2 mb-4'>{error}</p>}
+                              {error ? <p className='text-red-2 font-medium ml-2 mb-4'>{error}</p> : !error && message ? <p className='text-green-2 font-medium ml-2 mb-4'>{message}</p> : ''}
                               <div className='flex justify-end font-medium'>
                                 {
                                   editCategoriesClicked ?
-                                    <button onClick={() => setDeleteCategoryClicked(true)} className='bg-red-1 text-white rounded-full px-5 py-2 w-1/3 shadow-md mr-2 transition hover:bg-red-2' type='submit'>Delete</button>
+                                    <motion.button onClick={() => setDeleteCategoryClicked(true)} className='bg-red-1 text-white rounded-full px-5 py-2 w-1/3 shadow-md mr-3' type='submit'
+                                      whileHover={{
+                                        scale: 1.1,
+                                        background: '#C94646',
+                                        transition: {
+                                          duration: 0.2,
+                                          ease: 'easeInOut' 
+                                        }
+                                      }}
+                                      whileTap='tap'
+                                      variants={btnVariants}
+                                    >
+                                      Delete
+                                    </motion.button>
                                   : ''
                                 }
                                 <motion.button className='bg-light-purple-1 text-white rounded-full px-7 py-3 w-1/3 shadow-md' type='submit'

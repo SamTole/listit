@@ -116,6 +116,10 @@ export const editCategory = async (req, res) => {
   const { id, categoryName, categoryColor } = req.body
 
   try {
+    if (!categoryName || categoryColor == 'default') {
+      throw new Error('Name cannot be blank.')
+    }
+
     await User.findByIdAndUpdate(
       req.userId,
       {$set: {'categories.$[category].name': categoryName, 'categories.$[category].color': categoryColor}},
