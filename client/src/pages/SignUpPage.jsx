@@ -66,7 +66,9 @@ const SignUpPage = () => {
               <InputField onChange={(e) => setPassword(e.target.value)} name='password' value={password} type='password' placeholder='Password' />
             </div>
             <div className='w-full my-1'>
-              <PasswordStrengthMeter password={password} />
+              <div className='max-w-lg mx-auto'>
+                <PasswordStrengthMeter password={password} />
+              </div>
             </div>
             <FormBtn text='SIGN UP' />
             {error && <p className='text-red-2 font-semibold mt-6'>{error}</p>}

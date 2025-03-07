@@ -26,7 +26,17 @@ const DashboardPage = () => {
   const [deleteCategoryClicked, setDeleteCategoryClicked] = useState(false)
   // const [ellipsisClicked, setEllipsisClicked] = useState(null)
   const [editCategoriesClicked, setEditCategoriesClicked] = useState(false)
-  const { user, logout, addCategory, editCategory, deleteCategory, addTask, editTask, deleteTask, completeTask, incompleteTask } = useAuthStore()
+  const { user, logout, error, resetErrorMsg, addCategory, editCategory, deleteCategory, addTask, editTask, deleteTask, completeTask, incompleteTask } = useAuthStore()
+
+  const btnVariants = {
+    tap: {
+      scale: 1,
+      transition: {
+        duration: 0.1,
+        ease: 'easeOut' 
+      },
+    }
+  }
 
   const colorVariants = {
     red: {bg: 'bg-red-category', border: 'border-red-category', text: 'text-red-category', ellipsisHover: 'hover:bg-red-2'},
@@ -48,6 +58,8 @@ const DashboardPage = () => {
     setDayBefore(new Date(dayBefore))
     setDayAfter(dayAfter.setDate(currentDate.getDate() + 1))
     setDayAfter(new Date(dayAfter))
+
+    resetErrorMsg()
   }, [])
 
   useEffect(() => {
@@ -174,6 +186,7 @@ const DashboardPage = () => {
     setTaskCategory('default')
     setCategoryName('')
     setCategoryColor('default')
+    resetErrorMsg()
   }
 
   const getEditCategoryNameColor = (taskValue) => {
@@ -291,71 +304,99 @@ const DashboardPage = () => {
             }
             {
               categoryFormOpen ? 
-                <motion.div className='fixed top-0 left-0 h-screen w-screen flex justify-center items-center z-20'
-                  initial={{ opacity: 0, y: -30}}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.35, ease: 'easeInOut', delay: 0.05}}
-                >
-                  <div className='bg-white rounded-b-md rounded-t-sm overflow-clip w-1/3 shadow-xl shadow-light-purple-2'>
-                    <div className='border-t-4 border-light-purple-1 bg-light-purple-2 py-4 px-4 text-light-purple-1 flex items-center justify-between'>
-                      <div>{!editCategoriesClicked ? 'Add New Category' : 'Edit Categories'}</div>
-                      <button onClick={(e) => handleCategoryFormClosed()}><FontAwesomeIcon className='text-gray-4 transition hover:text-light-purple-1' icon={faXmark} size='lg' /></button>
-                    </div>
-                    {
-                      !editCategoriesClicked ?
-                        <div className='px-4 mt-4'>
-                          <button onClick={() => setEditCategoriesClicked(true)} className='font-medium text-sm border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow flex items-center transition hover:bg-light-purple-5 hover:border-light-purple-3'>
-                            Edit Categories
-                          </button>
-                        </div>
-                      : ''
-                    }
-                    <form onSubmit={handleCategorySubmit} className='py-6 px-5 flex flex-col text-gray-5'>
+                <div className='fixed top-0 left-0 z-20 w-screen h-screen flex items-center justify-center'>
+                  <motion.div className='w-full max-w-screen-2xl flex justify-center items-center'
+                    initial={{ opacity: 0, y: -30}}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, ease: 'easeInOut', delay: 0.05}}
+                  >
+                    <div className='bg-white rounded-b-md rounded-t-sm overflow-clip w-1/3 shadow-xl shadow-light-purple-2'>
+                      <div className='border-t-4 border-light-purple-1 bg-light-purple-2 py-4 px-4 text-light-purple-1 flex items-center justify-between'>
+                        <div>{!editCategoriesClicked ? 'Add New Category' : 'Edit Categories'}</div>
+                        <button onClick={(e) => handleCategoryFormClosed()}><FontAwesomeIcon className='text-gray-4 transition hover:text-light-purple-1' icon={faXmark} size='lg' /></button>
+                      </div>
                       {
-                        editCategoriesClicked ? 
-                          <div>
-                            <label>Select Category</label>
-                            <select onChange={(e) => getEditCategoryNameColor(e.target.value)} defaultValue={'default'} value={taskCategory} className='border-1 border-gray-3 rounded-md py-2 px-3 mb-4 w-full mt-2'>
-                              <option value="default" disabled></option>
-                              {
-                                user.categories.map((category, index) => 
-                                  <option value={category.id} key={index}>{category.name}</option>
-                                )
-                              }
-                            </select>
+                        !editCategoriesClicked ?
+                          <div className='px-4 mt-4'>
+                            <motion.button onClick={() => setEditCategoriesClicked(true)} className='font-medium text-sm border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow flex items-center'
+                              whileHover={{
+                                scale: 1.1,
+                                background: '#BDB9FF',
+                                border: 'solid 1px #827CF1',
+                                transition: {
+                                  duration: 0.2,
+                                  ease: 'easeInOut' 
+                                }
+                              }}
+                              whileTap='tap'
+                              variants={btnVariants}  
+                            >
+                              Edit Categories
+                            </motion.button>
                           </div>
                         : ''
                       }
-                      {
-                        (editCategoriesClicked && taskCategory !== 'default') || (!editCategoriesClicked) ? 
-                          <div className='flex flex-col'>
-                            {/* <label className='mb-2 ml-1'>Name</label> */}
-                            <input onChange={(e) => setCategoryName(e.target.value)} value={categoryName} type="text" placeholder='Name' className='bg-gray-8 shadow-sm rounded-full py-3 px-4 mb-6 focus:outline-light-purple-5 focus:ring-1' />
-                            {/* <label className='mb-2 ml-1'>Color</label> */}
-                            <select onChange={(e) => setCategoryColor(e.target.value)} defaultValue={'default'} value={categoryColor} className={`bg-gray-8 shadow-sm rounded-full py-3 px-4 mb-6 focus:outline-light-purple-5 focus:ring-1 focus:ring-light-purple-5 border-r-10 border-transparent ${categoryColor !== 'default' ? `${colorVariants[categoryColor].text} font-medium` : 'text-gray-2'}`}>
-                              <option value="default" className='bg-white' disabled>Color</option>
-                              <option value="red" className='bg-white font-medium text-red-category'>⬤ Red</option>
-                              <option value="orange" className='bg-white font-medium text-orange-category'>⬤ Orange</option>
-                              <option value="yellow" className='bg-white font-medium text-yellow-category'>⬤ Yellow</option>
-                              <option value="green" className='bg-white font-medium text-green-category'>⬤ Green</option>
-                              <option value="blue" className='bg-white font-medium text-blue-category'>⬤ Blue</option>
-                              <option value="purple" className='bg-white font-medium text-purple-category'>⬤ Purple</option>
-                              <option value="pink" className='bg-white font-medium text-pink-category'>⬤ Pink</option>
-                            </select>
-                            <div className='flex justify-end font-medium'>
-                              {
-                                editCategoriesClicked ?
-                                  <button onClick={() => setDeleteCategoryClicked(true)} className='bg-red-1 text-white rounded-full px-5 py-2 w-1/3 shadow-md mr-2 transition hover:bg-red-2' type='submit'>Delete</button>
-                                : ''
-                              }
-                              <button className='bg-light-purple-1 text-white rounded-full px-7 py-3 w-1/3 shadow-md transition hover:bg-dark-purple-2' type='submit'>Save</button>
+                      <form onSubmit={handleCategorySubmit} className='py-6 px-5 flex flex-col text-gray-5'>
+                        {
+                          editCategoriesClicked ? 
+                            <div>
+                              <label>Select Category</label>
+                              <select onChange={(e) => getEditCategoryNameColor(e.target.value)} defaultValue={'default'} value={taskCategory} className='border-1 border-gray-3 rounded-md py-2 px-3 mb-4 w-full mt-2'>
+                                <option value="default" disabled></option>
+                                {
+                                  user.categories.map((category, index) => 
+                                    <option value={category.id} key={index}>{category.name}</option>
+                                  )
+                                }
+                              </select>
                             </div>
-                          </div>
-                        : ''
-                      }
-                    </form>
-                  </div>
-                </motion.div>
+                          : ''
+                        }
+                        {
+                          (editCategoriesClicked && taskCategory !== 'default') || (!editCategoriesClicked) ? 
+                            <div className='flex flex-col'>
+                              {/* <label className='mb-2 ml-1'>Name</label> */}
+                              <input onChange={(e) => setCategoryName(e.target.value)} value={categoryName} type="text" placeholder='Name' className='bg-gray-8 shadow-sm rounded-full py-3 px-4 mb-6 focus:outline-light-purple-5 focus:ring-1' />
+                              {/* <label className='mb-2 ml-1'>Color</label> */}
+                              <select onChange={(e) => setCategoryColor(e.target.value)} defaultValue={'default'} value={categoryColor} className={`bg-gray-8 shadow-sm rounded-full py-3 px-4 mb-6 focus:outline-light-purple-5 focus:ring-1 focus:ring-light-purple-5 border-r-10 border-transparent ${categoryColor !== 'default' ? `${colorVariants[categoryColor].text} font-medium` : 'text-gray-2'}`}>
+                                <option value="default" className='bg-white' disabled>Color</option>
+                                <option value="red" className='bg-white font-medium text-red-category'>Red</option>
+                                <option value="orange" className='bg-white font-medium text-orange-category'>Orange</option>
+                                <option value="yellow" className='bg-white font-medium text-yellow-category'>Yellow</option>
+                                <option value="green" className='bg-white font-medium text-green-category'>Green</option>
+                                <option value="blue" className='bg-white font-medium text-blue-category'>Blue</option>
+                                <option value="purple" className='bg-white font-medium text-purple-category'>Purple</option>
+                                <option value="pink" className='bg-white font-medium text-pink-category'>Pink</option>
+                              </select>
+                              {error && <p className='text-red-2 font-medium ml-2 mb-4'>{error}</p>}
+                              <div className='flex justify-end font-medium'>
+                                {
+                                  editCategoriesClicked ?
+                                    <button onClick={() => setDeleteCategoryClicked(true)} className='bg-red-1 text-white rounded-full px-5 py-2 w-1/3 shadow-md mr-2 transition hover:bg-red-2' type='submit'>Delete</button>
+                                  : ''
+                                }
+                                <motion.button className='bg-light-purple-1 text-white rounded-full px-7 py-3 w-1/3 shadow-md' type='submit'
+                                  whileHover={{
+                                    scale: 1.1,
+                                    background: '#534CC7',
+                                    transition: {
+                                      duration: 0.2,
+                                      ease: 'easeInOut' 
+                                    }
+                                  }}
+                                  whileTap='tap'
+                                  variants={btnVariants}
+                                >
+                                  Save
+                                </motion.button>
+                              </div>
+                            </div>
+                          : ''
+                        }
+                      </form>
+                    </div>
+                  </motion.div>
+                </div>        
               :
                 <></>
             }

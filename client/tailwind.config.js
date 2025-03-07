@@ -12,6 +12,7 @@ export default {
         '30rem': '30rem',
         '35rem': '35rem',
         '42rem': '42rem',
+        '80rem': '80rem',
       },
     },
     borderWidth: {

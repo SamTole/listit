@@ -77,7 +77,11 @@ export const useAuthStore = create((set) => ({
         isLoading: false,
       }) 
     } catch (error) {
-      console.log(error)
+      set({
+        error: error.response.data.message || 'Error adding category.',
+        isLoading: false,
+      })
+      throw error
     }
   },
 

@@ -91,6 +91,10 @@ export const addCategory = async (req, res) => {
   const { categoryName, categoryColor } = req.body
 
   try {
+    if (!categoryName || categoryColor == 'default') {
+      throw new Error('Name and color are required.')
+    }
+
     await User.findByIdAndUpdate(req.userId, {$push: {categories: {id: new ObjectId().toString(), name: categoryName, color: categoryColor, dateAdded: new Date()}}})    
     const user = await User.findById(req.userId);
 
