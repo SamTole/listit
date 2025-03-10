@@ -1,5 +1,4 @@
 import { Route, Routes, Navigate } from 'react-router-dom';
-import HomePage from './pages/HomePage';
 import SignUpPage from './pages/SignUpPage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
@@ -46,9 +45,6 @@ function App() {
         <Route path='/' element={<ProtectedRoute>
           <DashboardPage />
         </ProtectedRoute>} />
-        <Route path='/home' element={<RedirectAuthenticatedUser>
-          <HomePage />
-        </RedirectAuthenticatedUser>} />
         <Route path='/signup' element={<RedirectAuthenticatedUser>
           <SignUpPage />
         </RedirectAuthenticatedUser>} />
