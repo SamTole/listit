@@ -51,6 +51,7 @@ function App() {
         <Route path='/login' element={<RedirectAuthenticatedUser>
           <LoginPage />
         </RedirectAuthenticatedUser>} />
+        <Route path='*' element={<Navigate to='/' replace />} />
       </Routes>
     </div>
   )
