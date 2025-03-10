@@ -315,7 +315,7 @@ const DashboardPage = () => {
                               }
                             </select>
                           </div>
-                          <div className='flex flex-col lg:w-1/2 w-full lg:pl-1'>
+                          <div className='lg:block flex flex-col lg:w-1/2 w-full lg:pl-1'>
                             <input onChange={(e) => setTaskDeadline(e.target.value)} value={taskDeadline} type="datetime-local" className='bg-gray-8 shadow-sm rounded-full py-3 px-4 focus:outline-light-purple-5 focus:ring-1 focus:ring-light-purple-5' />
                           </div>
                         </div>
