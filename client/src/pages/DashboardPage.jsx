@@ -480,7 +480,7 @@ const DashboardPage = () => {
           </div>
         {/* </div> */}
       </div>
-      <div className='w-full flex flex-col grow min-h-0 md:px-0 px-3'>
+      <div className='w-full flex flex-col grow min-h-0 md:px-0 px-3 md:pb-0 pb-3'>
         <div className='flex flex-col grow w-full overflow-x-auto'>
           <motion.div className='tasks-container w-full h-full md:px-16'
             initial={{ opacity: 0, y: -20}}
@@ -489,7 +489,7 @@ const DashboardPage = () => {
           >
             {
               tasks.map((taskCategory, index) => {
-                return <motion.div key={index} className={`${!taskCategory.length ? 'hidden' : ''} min-h-0 pr-3 overflow-y-auto relative md:mb-0 mb-10`}
+                return <motion.div key={index} className={`${!taskCategory.length ? 'hidden' : ''} min-h-0 pr-3 overflow-y-auto relative md:mb-0 mb-4`}
                 >
                   {taskCategory.map((task, index) => {
                   let categoryColor = user.categories.find((taskCat) => taskCat.id == task.category)
@@ -498,27 +498,8 @@ const DashboardPage = () => {
                     return <div key={index}>
                       <div className={`${index !== 0 ? 'hidden' : 'mb-3 font-medium'} ${colorVariants[categoryColor.color].bg} flex items-center justify-between px-7 py-5 rounded shadow text-white relative`}>
                         <div className='uppercase'>{categoryColor.name}</div>     
-                        {/* {
-                          ellipsisClicked && (ellipsisClicked == task.category) ? 
-                            <OutsideClickHandler
-                              onOutsideClick={() => {
-                                setEllipsisClicked(null)
-                              }}>   
-
-                              <div className='absolute right-0 top-14 bg-white text-gray-7 flex flex-col z-10 rounded shadow-md font-normal'>
-                                <button onClick={() => setEditCategoryClicked(task.category)} className='w-full text-left px-3 py-2 border-b-2 border-gray-3 transition hover:bg-gray-3'>Edit Category</button>
-                                <button className='w-full text-left px-3 py-2 transition hover:bg-gray-3'>Delete Category</button>
-                              </div>
-                            </OutsideClickHandler>              
-                          : ''
-                        }  */}
-                        {/* <div>
-                          <button onClick={() => setEllipsisClicked(task.category)} className={`py-1 px-2 rounded-full transition ${colorVariants[categoryColor.color].ellipsisHover}`}>
-                            <FontAwesomeIcon icon={faEllipsis} size='lg' />
-                          </button>     
-                        </div> */}
                       </div>
-                      <div onClick={() => {setTaskFormOpen(true); setTaskClicked(task)}} className={`${index > 0 ? 'mt-3' : ''} ${task.complete ? 'bg-green-1 transition hover:bg-green-3' : 'bg-white transition hover:bg-gray-3'} border-l-4 ${task.complete ? 'border-green-2' : colorVariants[categoryColor.color].border} drop-shadow-md p-5 rounded-md rounded-l-none flex items-center cursor-pointer`}>
+                      <div onClick={() => {setTaskFormOpen(true); setTaskClicked(task)}} className={`${index > 0 ? 'mt-3' : ''} ${task.complete ? 'bg-green-1 transition md:hover:bg-green-3' : 'bg-white transition md:hover:bg-gray-3'} border-l-4 ${task.complete ? 'border-green-2' : colorVariants[categoryColor.color].border} drop-shadow-md p-5 rounded-md rounded-l-none flex items-center cursor-pointer`}>
                         {
                           task.complete ?
                             <>
