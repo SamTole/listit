@@ -240,7 +240,7 @@ const DashboardPage = () => {
   }
 
   return (
-    <div className={`bg-light-purple-2 h-screen flex flex-col py-1 px-2 relative`}>
+    <div className={`bg-light-purple-2 md:h-screen flex flex-col py-1 px-2 relative`}>
       {taskFormOpen || categoryFormOpen ? <div className='fixed h-screen w-screen bg-white opacity-60 z-20'></div> : <></>}
       <div className='absolute top-0 left-0 w-full'>
         <Menu />
@@ -304,8 +304,8 @@ const DashboardPage = () => {
                         <input onChange={(e) => setTaskName(e.target.value)} value={taskName} type="text" placeholder='Task Name' className='bg-gray-8 shadow-sm rounded-full py-3 px-4 mb-6 focus:outline-light-purple-5 focus:ring-1' />
                         {/* Ensure this could be scrolled on screens with less height */}
                         <textarea onChange={(e) => setTaskDescription(e.target.value)} value={taskDescription} placeholder='Task Description' className='bg-gray-8 shadow-sm rounded-lg py-3 px-4 mb-6 focus:outline-light-purple-5 focus:ring-1'></textarea>
-                        <div className='flex flex-row items-center mb-6'>
-                          <div className='flex flex-col w-1/2 pr-1 mb-0'>
+                        <div className='flex sm:flex-row flex-col items-center mb-6'>
+                          <div className='flex flex-col sm:w-1/2 w-full sm:pr-1 pr-0 sm:mb-0 mb-6'>
                             <select onChange={(e) => setTaskCategory(e.target.value)} defaultValue={'default'} value={taskCategory} className='bg-gray-8 shadow-sm rounded-full py-3 px-4 focus:outline-light-purple-5 focus:ring-1 focus:ring-light-purple-5 border-r-10 border-transparent'>
                             <option value="default" className='bg-white' disabled>Select Category</option>
                               {
@@ -315,7 +315,7 @@ const DashboardPage = () => {
                               }
                             </select>
                           </div>
-                          <div className='flex flex-col w-1/2 pl-1'>
+                          <div className='flex flex-col sm:w-1/2 w-full sm:pl-1 pl-0'>
                             <input onChange={(e) => setTaskDeadline(e.target.value)} value={taskDeadline} type="datetime-local" className='bg-gray-8 shadow-sm rounded-full py-3 px-4 focus:outline-light-purple-5 focus:ring-1 focus:ring-light-purple-5 border-r-10 border-transparent' />
                           </div>
                         </div>
