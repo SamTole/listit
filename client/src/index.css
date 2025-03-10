@@ -5,6 +5,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+    background: '#E1DFFF';
+}
+
 .logo-font {
     font-family: "Playwrite US Modern", serif;
     font-optical-sizing: auto;
