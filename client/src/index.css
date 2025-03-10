@@ -41,6 +41,12 @@
     }
 }
 
+@media (min-width: 500px) and (max-width: 1000px) and (max-height: 500px) {
+    .task-form {
+        height: 100%;
+    }
+}
+
 select {
     -webkit-appearance: none;
     -moz-appearance: none;
