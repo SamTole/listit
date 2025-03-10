@@ -252,9 +252,9 @@ const DashboardPage = () => {
       <div className='absolute top-0 left-0 w-full'>
         <Menu />
       </div>
-      <div className='flex items-center justify-between px-16 py-8 mt-16'>
+      <div className='flex md:flex-row flex-col items-center justify-between lg:px-16 px-6 py-8 mt-16'>
         {/* <div className='flex'> */}
-          <div className='flex items-center'>
+          <div className='flex items-center md:mb-0 mb-6'>
             <button onClick={getDateBefore} className='text-2xl text-gray-4 transition hover:text-gray-5'>{todaysDate.toLocaleDateString() == dayBefore.toLocaleDateString() ? 'Today' : dayBefore.toLocaleDateString(undefined, options)}</button>
             <button className='text-4xl mx-8 font-medium flex flex-col text-gray-5'>{todaysDate.toLocaleDateString() == currentDate.toLocaleDateString() ? 'Today' : currentDate.toLocaleDateString(undefined, options)}
               <div className='flex justify-center'>
@@ -263,8 +263,8 @@ const DashboardPage = () => {
             </button>
             <button onClick={getDateAfter} className='text-2xl text-gray-4 hover:text-gray-5'>{todaysDate.toLocaleDateString() == dayAfter.toLocaleDateString() ? 'Today' : dayAfter.toLocaleDateString(undefined, options)}</button>
           </div>
-          <div className='flex items-center'>
-            <motion.button onClick={() => setTaskFormOpen(true)} className='font-medium border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow-sm flex items-center'
+          <div className='flex items-center md:px-0 px-6 md:w-fit w-full'>
+            <motion.button onClick={() => setTaskFormOpen(true)} className='md:w-fit w-1/2 font-medium border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow-sm flex items-center justify-center md:mr-0 mr-3'
               whileHover={{
                 scale: 1.1,
                 border: 'solid 1px #827CF1',
@@ -279,7 +279,7 @@ const DashboardPage = () => {
               <FontAwesomeIcon className='mr-3' icon={faPlus} size='sm' />
               Task
             </motion.button>
-            <motion.button onClick={() => setCategoryFormOpen(true)} className='font-medium border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow-sm flex items-center ml-3'
+            <motion.button onClick={() => setCategoryFormOpen(true)} className='md:w-fit w-1/2 font-medium border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow-sm flex items-center justify-center md:ml-3'
               whileHover={{
                 scale: 1.1,
                 border: 'solid 1px #827CF1',
@@ -480,16 +480,16 @@ const DashboardPage = () => {
           </div>
         {/* </div> */}
       </div>
-      <div className='w-full flex flex-col grow min-h-0'>
+      <div className='w-full flex flex-col grow min-h-0 md:px-0 px-3'>
         <div className='flex flex-col grow w-full overflow-x-auto'>
-          <motion.div className='tasks-container w-full h-full px-16'
+          <motion.div className='tasks-container w-full h-full md:px-16'
             initial={{ opacity: 0, y: -20}}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, ease: 'easeOut', delay: 0.1}}
           >
             {
               tasks.map((taskCategory, index) => {
-                return <motion.div key={index} className={`${!taskCategory.length ? 'hidden' : ''} min-h-0 pr-3 overflow-y-auto relative`}
+                return <motion.div key={index} className={`${!taskCategory.length ? 'hidden' : ''} min-h-0 pr-3 overflow-y-auto relative md:mb-0 mb-10`}
                 >
                   {taskCategory.map((task, index) => {
                   let categoryColor = user.categories.find((taskCat) => taskCat.id == task.category)
@@ -521,13 +521,23 @@ const DashboardPage = () => {
                       <div onClick={() => {setTaskFormOpen(true); setTaskClicked(task)}} className={`${index > 0 ? 'mt-3' : ''} ${task.complete ? 'bg-green-1 transition hover:bg-green-3' : 'bg-white transition hover:bg-gray-3'} border-l-4 ${task.complete ? 'border-green-2' : colorVariants[categoryColor.color].border} drop-shadow-md p-5 rounded-md rounded-l-none flex items-center cursor-pointer`}>
                         {
                           task.complete ?
-                            <button onClick={(e) => {markTaskIncomplete(task.id); e.stopPropagation()}}>
-                              <FontAwesomeIcon className={`text-green-category bg-white rounded-full transition hover:text-red-category hover:bg-white`} icon={faCheckCircle} size='3x' />
-                            </button>
+                            <>
+                              <button onClick={(e) => {markTaskIncomplete(task.id); e.stopPropagation()}} className='md:block hidden'>
+                                <FontAwesomeIcon className={`text-green-category bg-white rounded-full transition hover:text-red-category hover:bg-white`} icon={faCheckCircle} size='3x' />
+                              </button>
+                              <button onClick={(e) => {markTaskIncomplete(task.id); e.stopPropagation()}} className='block md:hidden'>
+                                <FontAwesomeIcon className={`text-green-category bg-white rounded-full`} icon={faCheckCircle} size='3x' />
+                              </button>
+                            </>
                           :
-                            <button onClick={(e) => {markTaskComplete(task.id); ; e.stopPropagation()}}>
-                              <FontAwesomeIcon className={`text-gray-8 bg-gray-2 rounded-full transition hover:text-green-category hover:bg-white`} icon={faCheckCircle} size='3x' />
-                            </button>
+                            <>
+                              <button onClick={(e) => {markTaskComplete(task.id); ; e.stopPropagation()}} className='md:block hidden'>
+                                <FontAwesomeIcon className={`text-gray-8 bg-gray-2 rounded-full transition hover:text-green-category hover:bg-white`} icon={faCheckCircle} size='3x' />
+                              </button>
+                              <button onClick={(e) => {markTaskComplete(task.id); ; e.stopPropagation()}} className='block md:hidden'>
+                                <FontAwesomeIcon className={`text-gray-8 bg-gray-2 rounded-full`} icon={faCheckCircle} size='3x' />
+                              </button>
+                            </>
                         }
                         <div className={`font-medium pl-5`}>
                           <div className='mb-1 line-clamp-1'>{task.name}</div>
