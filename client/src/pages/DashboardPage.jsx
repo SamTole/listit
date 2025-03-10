@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useAuthStore } from '../store/authStore'
 import { motion } from 'framer-motion'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleLeft, faAngleRight, faPlus, faXmark, faCheckCircle, faEllipsis } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faXmark, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import Menu from '../components/Menu';
-import FormBtn from '../components/FormBtn';
 import moment from '../../node_modules/moment/src/moment'
 
 const DashboardPage = () => {
@@ -75,7 +74,6 @@ const DashboardPage = () => {
     })
 
     filteredCategories.sort((a, b) => a.dateAdded - b.dateAdded)
-    console.log('c', filteredCategories)
 
     filteredCategories.forEach((category) => {
       let arr = user.tasks.filter((task) => task.category == category.id)
@@ -113,7 +111,6 @@ const DashboardPage = () => {
     })
 
     filteredTasks = allTasks
-    console.log('all', allTasks)
     
     setTasks(filteredTasks)
   }, [user, currentDate])
@@ -126,10 +123,6 @@ const DashboardPage = () => {
       setTaskDeadline(moment(taskClicked.deadline).format('YYYY-MM-DDTHH:mm'))
     }
   }, [taskClicked])
-
-  // const handleLogout = () => {
-  //   logout();
-  // }
   
   const handleCategorySubmit = async (e) => {
     e.preventDefault()

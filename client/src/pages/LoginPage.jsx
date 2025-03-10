@@ -1,6 +1,6 @@
 import { React, useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import InputField from '../components/InputField';
 import FormBtn from '../components/FormBtn';
 import Logo from '../components/Logo';
@@ -13,6 +13,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("")
   const { login, isLoading, error, resetErrorMsg } = useAuthStore()
+  const navigate = useNavigate()
 
   useEffect(() => {
     resetErrorMsg()

@@ -1,10 +1,8 @@
 import { Route, Routes, Navigate } from 'react-router-dom';
-import FloatingShape from './components/FloatingShape';
 import HomePage from './pages/HomePage';
 import SignUpPage from './pages/SignUpPage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
-import LoadingSpinner from './components/LoadingSpinner';
 import { useAuthStore } from './store/authStore';
 import { useEffect } from 'react';
 
@@ -38,12 +36,9 @@ function App() {
     checkAuth();
   }, [checkAuth])
 
-  if (isCheckingAuth) {
-    return <LoadingSpinner />;
-  }
-
-  console.log('isauthenticated ', isAuthenticated)
-  console.log('user ', user)
+  // if (isCheckingAuth) {
+  //   return <LoadingSpinner />;
+  // }
 
   return (
     <div className='rubik-font'>

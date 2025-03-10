@@ -15,7 +15,7 @@ const SignUpPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const { signup, error, isLoading, resetErrorMsg } = useAuthStore();
+  const { signup, error, resetErrorMsg } = useAuthStore();
 
   useEffect(() => {
     resetErrorMsg()
