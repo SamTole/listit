@@ -248,7 +248,7 @@ const DashboardPage = () => {
 
   return (
     <div className={`bg-light-purple-2 h-screen flex flex-col py-1 px-2 relative`}>
-      {taskFormOpen || categoryFormOpen ? <div className='fixed h-screen w-screen bg-white opacity-60 z-10'></div> : <></>}
+      {taskFormOpen || categoryFormOpen ? <div className='fixed h-screen w-screen bg-white opacity-60 z-20'></div> : <></>}
       <div className='absolute top-0 left-0 w-full'>
         <Menu />
       </div>
@@ -483,9 +483,9 @@ const DashboardPage = () => {
       <div className='w-full flex flex-col grow min-h-0'>
         <div className='flex flex-col grow w-full overflow-x-auto'>
           <motion.div className='tasks-container w-full h-full px-16'
-            initial={{ opacity: 0, y: -30}}
+            initial={{ opacity: 0, y: -20}}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, ease: 'easeInOut', delay: 0.1}}
+            transition={{ duration: 0.3, ease: 'easeOut', delay: 0.1}}
           >
             {
               tasks.map((taskCategory, index) => {
