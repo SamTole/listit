@@ -47,6 +47,22 @@
     }
 }
 
+@media (max-width: 500px) {
+    .button-div-small-screen {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .button-small-screen {
+        margin-right: 0;
+        width: 100%;
+    }
+
+    .button-small-screen-mb {
+        margin-bottom: 1rem;
+    }
+}
+
 select {
     -webkit-appearance: none;
     -moz-appearance: none;

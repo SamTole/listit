@@ -256,8 +256,8 @@ const DashboardPage = () => {
             </button>
             <button onClick={getDateAfter} className='text-2xl text-gray-4 hover:text-gray-5'>{todaysDate.toLocaleDateString() == dayAfter.toLocaleDateString() ? 'Today' : dayAfter.toLocaleDateString(undefined, options)}</button>
           </div>
-          <div className='flex items-center md:px-0 px-6 md:w-fit w-full'>
-            <motion.button onClick={() => setTaskFormOpen(true)} className='md:w-fit w-1/2 font-medium border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow-sm flex items-center justify-center md:mr-0 mr-3'
+          <div className='flex items-center button-div-small-screen md:px-0 px-6 md:w-fit w-full'>
+            <motion.button onClick={() => setTaskFormOpen(true)} className='md:w-fit w-1/2 font-medium border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow-sm flex items-center justify-center md:mr-0 mr-3 button-small-screen button-small-screen-mb'
               whileHover={{
                 scale: 1.1,
                 border: 'solid 1px #827CF1',
@@ -272,7 +272,7 @@ const DashboardPage = () => {
               <FontAwesomeIcon className='mr-3' icon={faPlus} size='sm' />
               Task
             </motion.button>
-            <motion.button onClick={() => setCategoryFormOpen(true)} className='md:w-fit w-1/2 font-medium border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow-sm flex items-center justify-center md:ml-3'
+            <motion.button onClick={() => setCategoryFormOpen(true)} className='md:w-fit w-1/2 font-medium border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow-sm flex items-center justify-center md:ml-3 button-small-screen'
               whileHover={{
                 scale: 1.1,
                 border: 'solid 1px #827CF1',
@@ -295,7 +295,7 @@ const DashboardPage = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.35, ease: 'easeInOut', delay: 0.05}}
                   >
-                    <div className='bg-white rounded-b-md rounded-t-sm overflow-clip md:w-1/3 md:max-lg:w-1/2 task-form overflow-y-auto shadow-xl w-full shadow-light-purple-2'>
+                    <div className='bg-white rounded-b-md rounded-t-sm overflow-clip md:w-1/3 md:max-lg:w-1/2 task-form overflow-y-auto overflow-x-auto shadow-xl w-full shadow-light-purple-2'>
                       <div className='border-t-4 border-light-purple-1 bg-light-purple-2 py-4 px-4 text-light-purple-1 flex items-center justify-between'>
                         <div>{taskClicked ? 'Edit Task' : 'Add New Task'}</div>
                         <button onClick={handleTaskFormClosed}><FontAwesomeIcon className='text-gray-4 transition hover:text-light-purple-1' icon={faXmark} size='lg' /></button>
@@ -304,8 +304,8 @@ const DashboardPage = () => {
                         <input onChange={(e) => setTaskName(e.target.value)} value={taskName} type="text" placeholder='Task Name' className='bg-gray-8 shadow-sm rounded-full py-3 px-4 mb-6 focus:outline-light-purple-5 focus:ring-1' />
                         {/* Ensure this could be scrolled on screens with less height */}
                         <textarea onChange={(e) => setTaskDescription(e.target.value)} value={taskDescription} placeholder='Task Description' className='bg-gray-8 shadow-sm rounded-lg py-3 px-4 mb-6 focus:outline-light-purple-5 focus:ring-1'></textarea>
-                        <div className='flex lg:flex-row flex-col items-center mb-6'>
-                          <div className='flex flex-col lg:w-1/2 w-full lg:pr-1 mb-6 lg:mb-0'>
+                        <div className='flex flex-row items-center mb-6'>
+                          <div className='flex flex-col w-1/2 pr-1 mb-0'>
                             <select onChange={(e) => setTaskCategory(e.target.value)} defaultValue={'default'} value={taskCategory} className='bg-gray-8 shadow-sm rounded-full py-3 px-4 focus:outline-light-purple-5 focus:ring-1 focus:ring-light-purple-5 border-r-10 border-transparent'>
                             <option value="default" className='bg-white' disabled>Select Category</option>
                               {
@@ -315,7 +315,7 @@ const DashboardPage = () => {
                               }
                             </select>
                           </div>
-                          <div className='lg:block flex flex-col lg:w-1/2 w-full lg:pl-1'>
+                          <div className='flex flex-col w-1/2 pl-1'>
                             <input onChange={(e) => setTaskDeadline(e.target.value)} value={taskDeadline} type="datetime-local" className='bg-gray-8 shadow-sm rounded-full py-3 px-4 focus:outline-light-purple-5 focus:ring-1 focus:ring-light-purple-5' />
                           </div>
                         </div>
