@@ -23,7 +23,6 @@ const DashboardPage = () => {
   const [taskClicked, setTaskClicked] = useState(null)
   const [deleteClicked, setDeleteClicked] = useState(false)
   const [deleteCategoryClicked, setDeleteCategoryClicked] = useState(false)
-  // const [ellipsisClicked, setEllipsisClicked] = useState(null)
   const [editCategoriesClicked, setEditCategoriesClicked] = useState(false)
   const { user, logout, error, message, resetErrorMsg, resetMsg, addCategory, editCategory, deleteCategory, addTask, editTask, deleteTask, completeTask, incompleteTask } = useAuthStore()
 
@@ -239,6 +238,22 @@ const DashboardPage = () => {
     setDayAfter(new Date(newDayAfter))
   }
 
+  const displayAddTaskMsg = () => {
+    let noTasks = <div className='lg:px-16 px-6 text-xl font-medium text-gray-5'>You have no tasks for this day.</div>
+
+    if (user.tasks.length) {
+      let currentDateMatch = user.tasks.find((task) => new Date(task.deadline).toDateString() == currentDate.toDateString())
+      console.log('cur', currentDateMatch)
+
+      if (!currentDateMatch) {
+        return noTasks
+      }
+    }
+    else {
+      return noTasks
+    }
+  }
+
   return (
     <div className={`bg-light-purple-2 md:h-screen flex flex-col py-1 px-2 relative`}>
       {taskFormOpen || categoryFormOpen ? <div className='fixed h-screen w-screen bg-white opacity-60 z-20'></div> : <></>}
@@ -296,7 +311,6 @@ const DashboardPage = () => {
                     transition={{ duration: 0.35, ease: 'easeInOut', delay: 0.05}}
                   >
                     <div className='bg-white rounded-b-md rounded-t-sm overflow-clip md:max-w-xl task-form overflow-y-auto overflow-x-auto shadow-xl w-full shadow-light-purple-2'>
-                    {/* <div className='bg-white rounded-b-md rounded-t-sm overflow-clip md:w-1/3 md:max-lg:w-1/2 task-form overflow-y-auto overflow-x-auto shadow-xl w-full shadow-light-purple-2'> */}
                       <div className='border-t-4 border-light-purple-1 bg-light-purple-2 py-4 px-4 text-light-purple-1 flex items-center justify-between'>
                         <div className='text-lg'>{taskClicked ? 'Edit Task' : 'Add New Task'}</div>
                         <button onClick={handleTaskFormClosed}><FontAwesomeIcon className='text-gray-4 transition hover:text-light-purple-1' icon={faXmark} size='xl' /></button>
@@ -473,6 +487,7 @@ const DashboardPage = () => {
       </div>
       <div className='w-full flex flex-col grow min-h-0 md:px-0 px-3 md:pb-0 pb-3'>
         <div className='flex flex-col grow w-full overflow-x-auto'>
+          {displayAddTaskMsg()}
           <motion.div className='tasks-container w-full h-full lg:px-16 md:max-lg:px-6'
             initial={{ opacity: 0, y: -20}}
             animate={{ opacity: 1, y: 0 }}
