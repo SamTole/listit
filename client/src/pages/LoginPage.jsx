@@ -32,10 +32,10 @@ const LoginPage = () => {
 
   return (
     <div className='md:grid grid-cols-5 flex flex-col h-screen relative'>
-      <div className='md:absolute md:flex-none col-span-5 flex justify-start items-start w-full top-0 left-0 py-6 px-8'>
+      <div className='bg-white md:absolute md:flex-none col-span-5 flex justify-start items-start w-full top-0 left-0 py-6 px-8'>
         <Logo />
       </div>
-      <div className='col-span-3 flex flex-col items-center justify-center text-center w-full md:max-lg:pt-28 md:max-lg:pb-20 pb-20 pt-10 lg:pb-0 lg:pt-0 grow'>
+      <div className='bg-white col-span-3 flex flex-col items-center justify-center text-center w-full md:max-lg:pt-28 md:max-lg:pb-20 pb-20 pt-10 lg:pb-0 lg:pt-0 grow'>
         <motion.div className='lg:w-3/5 w-full lg:px-0 md:max-lg:px-20 px-10'
           initial={{ opacity: 0, y: 30}}
           animate={{ opacity: 1, y: 0 }}

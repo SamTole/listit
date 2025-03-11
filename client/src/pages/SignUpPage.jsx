@@ -44,7 +44,7 @@ const SignUpPage = () => {
       >
         <RegisterImg />
       </motion.div>
-      <div className='col-span-3 flex flex-col items-center justify-center text-center w-full md:pt-28 pb-20 pt-32 grow'>
+      <div className='bg-white col-span-3 flex flex-col items-center justify-center text-center w-full md:pt-28 pb-20 pt-32 grow'>
         <motion.div className='lg:w-3/5 w-full lg:px-0 md:max-lg:px-20 px-10'
           initial={{ opacity: 0, y: 30}}
           animate={{ opacity: 1, y: 0 }}
