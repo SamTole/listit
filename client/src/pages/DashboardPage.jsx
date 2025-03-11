@@ -295,10 +295,11 @@ const DashboardPage = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.35, ease: 'easeInOut', delay: 0.05}}
                   >
-                    <div className='bg-white rounded-b-md rounded-t-sm overflow-clip md:w-1/3 md:max-lg:w-1/2 task-form overflow-y-auto overflow-x-auto shadow-xl w-full shadow-light-purple-2'>
+                    <div className='bg-white rounded-b-md rounded-t-sm overflow-clip md:max-w-xl task-form overflow-y-auto overflow-x-auto shadow-xl w-full shadow-light-purple-2'>
+                    {/* <div className='bg-white rounded-b-md rounded-t-sm overflow-clip md:w-1/3 md:max-lg:w-1/2 task-form overflow-y-auto overflow-x-auto shadow-xl w-full shadow-light-purple-2'> */}
                       <div className='border-t-4 border-light-purple-1 bg-light-purple-2 py-4 px-4 text-light-purple-1 flex items-center justify-between'>
-                        <div>{taskClicked ? 'Edit Task' : 'Add New Task'}</div>
-                        <button onClick={handleTaskFormClosed}><FontAwesomeIcon className='text-gray-4 transition hover:text-light-purple-1' icon={faXmark} size='lg' /></button>
+                        <div className='text-lg'>{taskClicked ? 'Edit Task' : 'Add New Task'}</div>
+                        <button onClick={handleTaskFormClosed}><FontAwesomeIcon className='text-gray-4 transition hover:text-light-purple-1' icon={faXmark} size='xl' /></button>
                       </div>
                       <form onSubmit={handleTaskSubmit} className='py-6 px-5 flex flex-col text-gray-5'>
                         <input onChange={(e) => setTaskName(e.target.value)} value={taskName} type="text" placeholder='Task Name' className='bg-gray-8 shadow-sm rounded-full py-3 px-4 mb-6 focus:outline-light-purple-5 focus:ring-1' />
@@ -320,12 +321,11 @@ const DashboardPage = () => {
                           </div>
                         </div>
                         {error ? <p className='text-red-2 font-medium ml-2 mb-4'>{error}</p> : !error && message ? <p className='text-green-2 font-medium ml-2 mb-4'>{message}</p> : ''}
-                        <div className='flex justify-end font-medium'>
+                        <div className='flex sm:flex-row flex-col justify-end font-medium'>
                           {
                             taskClicked ?
-                              <motion.button onClick={() => setDeleteClicked(true)} className='bg-red-1 text-white rounded-full px-5 py-2 w-1/3 shadow-md mr-3' type='submit'
+                              <motion.button onClick={() => setDeleteClicked(true)} className='bg-red-1 text-white rounded-full px-5 sm:py-3 py-4 sm:w-1/3 w-full shadow-md sm:mr-3 sm:mb-0 mb-3' type='submit'
                                 whileHover={{
-                                  scale: 1.1,
                                   background: '#C94646',
                                   transition: {
                                     duration: 0.2,
@@ -339,9 +339,8 @@ const DashboardPage = () => {
                               </motion.button>
                             : ''
                           }
-                          <motion.button className='bg-light-purple-1 text-white rounded-full px-7 py-3 w-1/3 shadow-md' type='submit'
+                          <motion.button className='bg-light-purple-1 text-white rounded-full px-7 sm:py-3 py-4 sm:w-1/3 w-full shadow-md' type='submit'
                             whileHover={{
-                              scale: 1.1,
                               background: '#534CC7',
                               transition: {
                                 duration: 0.2,
@@ -369,15 +368,15 @@ const DashboardPage = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.35, ease: 'easeInOut', delay: 0.05}}
                   >
-                    <div className='bg-white rounded-b-md rounded-t-sm overflow-clip md:w-1/3 md:max-lg:w-1/2 task-form overflow-y-auto shadow-xl w-full shadow-light-purple-2'>
+                    <div className='bg-white rounded-b-md rounded-t-sm overflow-clip md:max-w-xl task-form overflow-y-auto shadow-xl w-full shadow-light-purple-2'>
                       <div className='border-t-4 border-light-purple-1 bg-light-purple-2 py-4 px-4 text-light-purple-1 flex items-center justify-between'>
-                        <div>{!editCategoriesClicked ? 'Add New Category' : 'Edit Categories'}</div>
-                        <button onClick={(e) => handleCategoryFormClosed()}><FontAwesomeIcon className='text-gray-4 transition hover:text-light-purple-1' icon={faXmark} size='lg' /></button>
+                        <div className='text-lg'>{!editCategoriesClicked ? 'Add New Category' : 'Edit Categories'}</div>
+                        <button onClick={(e) => handleCategoryFormClosed()}><FontAwesomeIcon className='text-gray-4 transition hover:text-light-purple-1' icon={faXmark} size='xl' /></button>
                       </div>
                       {
                         !editCategoriesClicked ?
                           <div className='px-4 mt-4'>
-                            <motion.button onClick={() => {setEditCategoriesClicked(true); resetErrorMsg(); resetMsg()}} className='font-medium text-sm border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow flex items-center'
+                            <motion.button onClick={() => {setEditCategoriesClicked(true); resetErrorMsg(); resetMsg()}} className='font-medium border-2 border-light-purple-5 text-dark-purple-2 py-3 px-5 rounded-full shadow flex items-center'
                               whileHover={{
                                 scale: 1.1,
                                 border: 'solid 1px #827CF1',
@@ -426,10 +425,10 @@ const DashboardPage = () => {
                                 <option value="pink" className='bg-white font-medium text-pink-category'>Pink</option>
                               </select>
                               {error ? <p className='text-red-2 font-medium ml-2 mb-4'>{error}</p> : !error && message ? <p className='text-green-2 font-medium ml-2 mb-4'>{message}</p> : ''}
-                              <div className='flex justify-end font-medium'>
+                              <div className='flex sm:flex-row flex-col justify-end font-medium'>
                                 {
                                   editCategoriesClicked ?
-                                    <motion.button onClick={() => setDeleteCategoryClicked(true)} className='bg-red-1 text-white rounded-full px-5 py-2 w-1/3 shadow-md mr-3' type='submit'
+                                    <motion.button onClick={() => setDeleteCategoryClicked(true)} className='bg-red-1 text-white rounded-full px-5 sm:py-3 py-4 sm:w-1/3 w-full shadow-md sm:mr-3 sm:mb-0 mb-3' type='submit'
                                       whileHover={{
                                         scale: 1.1,
                                         background: '#C94646',
@@ -445,9 +444,8 @@ const DashboardPage = () => {
                                     </motion.button>
                                   : ''
                                 }
-                                <motion.button className='bg-light-purple-1 text-white rounded-full px-7 py-3 w-1/3 shadow-md' type='submit'
+                                <motion.button className='bg-light-purple-1 text-white rounded-full px-7 sm:py-3 py-4 sm:w-1/3 w-full shadow-md' type='submit'
                                   whileHover={{
-                                    scale: 1.1,
                                     background: '#534CC7',
                                     transition: {
                                       duration: 0.2,

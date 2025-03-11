@@ -6,7 +6,8 @@
 @tailwind utilities;
 
 body {
-    background: '#E1DFFF';
+    background-color: #E1DFFF;
+    height: 100vh;
 }
 
 .logo-font {
